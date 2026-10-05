@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NORMA · Income Distribution by Billing Statement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F4F2; --panel:#FFFFFF; --side:#16302B; --side-ink:#C9DCD5; --side-hi:#244A41; --ink:#1E2B2B; --ink-2:#4A5A59; --ink-3:#7B8A88; --rule:#D3DBD7; --rule-2:#E7ECE9; --hi:#E6F2EE;
+  --accent:#1F6F5C; --accent-ink:#fff; --warn:#B4493A; --warn-bg:#FBEDEA; --ok:#13806F; --ok-bg:#E3F4EF; --draft:#8A6A12; --draft-bg:#FBF3DC;
+  --c-ae:#13806F; --c-ns:#233F8C; --c-res:#C0693A; --c-reb:#B5577A; --c-pass:#8A9A9E; --c-tax:#6B5B95;
+  --font:"Archivo","Segoe UI",Arial,sans-serif; color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121A1B; --panel:#1A2425; --side:#0E1617; --side-ink:#A9BDB6; --side-hi:#1D3631; --ink:#E7EEEC; --ink-2:#B3C1BE; --ink-3:#86958F; --rule:#33403F; --rule-2:#253030; --hi:#1E3530;
+  --accent:#4CC2A9; --accent-ink:#0E1A18; --warn:#E07B67; --warn-bg:#3A2420; --ok:#4CC2A9; --ok-bg:#183630; --draft:#E2C25C; --draft-bg:#352D14;
+  --c-ae:#2FA58F; --c-ns:#6E8CE0; --c-res:#DD8752; --c-reb:#D07495; --c-pass:#7F9094; --c-tax:#9A88C6; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#121A1B; --panel:#1A2425; --side:#0E1617; --side-ink:#A9BDB6; --side-hi:#1D3631; --ink:#E7EEEC; --ink-2:#B3C1BE; --ink-3:#86958F; --rule:#33403F; --rule-2:#253030; --hi:#1E3530;
+  --accent:#4CC2A9; --accent-ink:#0E1A18; --warn:#E07B67; --warn-bg:#3A2420; --ok:#4CC2A9; --ok-bg:#183630; --draft:#E2C25C; --draft-bg:#352D14;
+  --c-ae:#2FA58F; --c-ns:#6E8CE0; --c-res:#DD8752; --c-reb:#D07495; --c-pass:#7F9094; --c-tax:#9A88C6; color-scheme:dark;}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);height:100%}
+aside{background:var(--side);color:var(--side-ink);padding:18px 12px;overflow:auto}
+.logo{font-stretch:75%;font-weight:800;font-size:22px;color:#fff;letter-spacing:.01em;padding:0 8px}
+.logo small{display:block;font-stretch:100%;font-weight:500;font-size:12px;color:var(--side-ink);letter-spacing:0;margin-top:2px}
+.navsec{font-size:12px;color:#7FA096;margin:22px 8px 6px;font-weight:600}
+aside a{display:flex;justify-content:space-between;align-items:center;color:var(--side-ink);text-decoration:none;padding:7px 10px;border-radius:6px;font-weight:500}
+aside a:hover{background:var(--side-hi);color:#fff}
+aside a.on{background:var(--side-hi);color:#fff;font-weight:650;box-shadow:inset 3px 0 0 #4CC2A9}
+aside a .n{font-size:12px;color:#7FA096}
+.side-foot{margin-top:28px;padding:0 8px;display:flex;flex-direction:column;gap:8px}
+.side-foot button{background:none;border:1px solid #2E4D46;color:var(--side-ink);border-radius:6px;padding:6px 10px;cursor:pointer;text-align:left}
+
+main{overflow:auto;min-width:0}
+.page{padding:22px clamp(14px,3vw,36px) 70px;max-width:1500px}
+.crumbs{color:var(--ink-3);font-size:13px;margin-bottom:4px}
+.crumbs a{color:var(--ink-3);text-decoration:none}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+h1{font-stretch:80%;font-weight:760;font-size:28px;line-height:1.1;margin:0}
+h2{font-size:16px;font-weight:700;margin:0}
+.sub{color:var(--ink-2);margin:4px 0 0}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--rule);background:var(--panel);border-radius:7px;padding:7px 13px;cursor:pointer;font-weight:600;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{color:var(--warn)}
+.btn.sm{padding:4px 9px;font-size:13px;font-weight:600}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:10px;margin-bottom:16px}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--rule-2);flex-wrap:wrap}
+.card-b{padding:14px 16px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--ink-2);font-weight:600}
+label.f .hint{font-weight:400;color:var(--ink-3);font-size:12px}
+input.i,select.i,textarea.i{border:1px solid var(--rule);border-radius:6px;padding:7px 9px;background:var(--panel);font-size:14px;font-weight:400;color:var(--ink);width:100%;min-width:0}
+input.i[readonly]{background:var(--rule-2);color:var(--ink-2)}
+input.num{text-align:right}
+.chk{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink);font-weight:500;cursor:pointer}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px 18px}
+.kv div small{display:block;color:var(--ink-3);font-size:12px}
+.kv div b{font-weight:650}
+
+.tw{overflow-x:auto}
+table.t{border-collapse:collapse;width:100%;background:var(--panel);font-size:13.5px}
+table.t th,table.t td{padding:8px 10px;border-bottom:1px solid var(--rule-2);text-align:left;vertical-align:middle}
+table.t thead th{font-size:12px;color:var(--ink-3);font-weight:650;background:var(--panel);position:sticky;top:0;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.t td.r,table.t th.r{text-align:right;white-space:nowrap}
+table.t tbody tr.click{cursor:pointer}
+table.t tbody tr.click:hover{background:var(--hi)}
+table.t tfoot td{font-weight:700;border-top:2px solid var(--rule);background:var(--panel)}
+table.t tr.grp td{background:var(--rule-2);font-weight:650;font-size:12.5px;color:var(--ink-2)}
+table.edit td{padding:5px 6px}
+table.edit input.i, table.edit select.i{padding:6px 7px;font-size:13.5px}
+.muted{color:var(--ink-3)}
+.mono{font-family:Consolas,Menlo,monospace;font-size:12.5px}
+.tag{display:inline-block;font-size:12px;font-weight:650;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.tag.posted{background:var(--ok-bg);color:var(--ok)} .tag.draft{background:var(--draft-bg);color:var(--draft)} .tag.bad{background:var(--warn-bg);color:var(--warn)}
+.tag.t-house{background:#E3E9F7;color:#233F8C} .tag.t-int{background:#DDF1EB;color:#13684F} .tag.t-ext{background:#F4E4EC;color:#8E3B5E} .tag.t-emp{background:#F6E8DA;color:#8A4A1C}
+:root[data-theme="dark"] .tag.t-house,:root[data-theme="dark"] .tag.t-int,:root[data-theme="dark"] .tag.t-ext,:root[data-theme="dark"] .tag.t-emp{background:var(--rule-2);color:var(--ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag.t-house,:root:not([data-theme="light"]) .tag.t-int,:root:not([data-theme="light"]) .tag.t-ext,:root:not([data-theme="light"]) .tag.t-emp{background:var(--rule-2);color:var(--ink)}}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.filters .i{width:auto}
+.filters input.i{min-width:240px}
+
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-bottom:16px;overflow:hidden}
+.kpi{padding:12px 16px;border-right:1px solid var(--rule-2)}
+.kpi:last-child{border-right:0}
+.kpi b{display:block;font-size:19px;font-stretch:88%}
+.kpi small{display:flex;gap:6px;align-items:center;color:var(--ink-3);font-size:12.5px}
+.kpi i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.bar{display:flex;height:10px;border-radius:3px;overflow:hidden;background:var(--rule-2);min-width:120px}
+.bar span{height:100%}
+
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);margin:4px 0 14px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:9px 14px;cursor:pointer;font-weight:650;color:var(--ink-3);border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.je{margin-bottom:18px}
+.je .card-h b{font-size:14.5px}
+.alert{padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:13.5px}
+.alert.warn{background:var(--warn-bg);color:var(--warn)}
+.alert.info{background:var(--hi);color:var(--ink-2)}
+.empty{padding:40px 20px;text-align:center;color:var(--ink-3)}
+.doc{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:22px 26px;max-width:860px;margin-bottom:18px}
+.doc h3{font-stretch:85%;font-size:20px;margin:0 0 2px}
+.doc .meta{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--ink-2);margin:10px 0 16px;font-size:13.5px}
+
+dialog{border:1px solid var(--rule);border-radius:12px;padding:0;background:var(--panel);color:var(--ink);width:min(640px,94vw);max-height:90vh}
+dialog::backdrop{background:rgba(10,20,18,.45)}
+dialog form{display:flex;flex-direction:column;max-height:90vh}
+dialog .dh{padding:14px 18px;border-bottom:1px solid var(--rule-2);display:flex;justify-content:space-between;align-items:center}
+dialog .db{padding:16px 18px;overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+dialog .db .full{grid-column:1 / -1}
+dialog .df{padding:12px 18px;border-top:1px solid var(--rule-2);display:flex;justify-content:flex-end;gap:8px}
+.toast{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;opacity:0;transform:translateY(8px);transition:all .2s;z-index:50;pointer-events:none;max-width:360px}
+.toast.show{opacity:1;transform:none}
+.hier{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 16px;font-size:12.5px;color:var(--ink-3)}
+.hier span{border:1px solid var(--rule);border-radius:99px;padding:3px 10px;background:var(--panel);color:var(--ink-2)}
+.hier span.on{border-color:var(--accent);color:var(--accent);font-weight:700}
+.hier i{font-style:normal}
+.tag.mode{background:var(--rule-2);color:var(--ink-2)}
+td.neg,td.neg b{color:var(--warn)}
+table.t.nw td,table.t.nw th{white-space:nowrap}
+table.t.nw tr.grp td{white-space:normal}
+table.t tr.grp td a{color:inherit}
+
+/* mode switch */
+.modesw{display:flex;background:rgba(255,255,255,.07);border-radius:8px;padding:3px;margin:16px 0 4px}
+.modesw button{flex:1;border:0;background:none;color:var(--side-ink);padding:7px 6px;border-radius:6px;cursor:pointer;font-weight:650;font-size:13px}
+.modesw button[aria-pressed="true"]{background:#4CC2A9;color:#0E1A18}
+.modesw.sm{margin:0;flex:0 0 auto}.modesw.sm button{padding:6px 9px;font-size:12px}
+#navDemo{display:none}
+body.demo-mode #navDemo{display:block} body.demo-mode #navFull{display:none}
+/* demo home */
+.demo-hero{padding:18px 0 8px;max-width:760px}
+.demo-eyebrow{font-stretch:75%;font-weight:800;font-size:18px;color:var(--accent)}
+.demo-h1{font-stretch:75%;font-weight:800;font-size:clamp(34px,5vw,56px);line-height:1;margin:4px 0 12px;letter-spacing:-.01em}
+.demo-lede{font-size:19px;color:var(--ink-2);margin:0;max-width:52ch}
+.demo-flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:26px 0 8px}
+.demo-flow div{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:10px 14px;min-width:130px}
+.demo-flow div b{display:block;font-size:14.5px}.demo-flow div span{font-size:12.5px;color:var(--ink-3)}
+.demo-flow i{align-self:center;font-style:normal;color:var(--ink-3)}
+.demo-h2{font-stretch:85%;font-size:22px;margin:34px 0 14px}
+.scen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:14px}
+.scen{display:flex;flex-direction:column;gap:4px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:18px 18px 14px;text-decoration:none;color:var(--ink);transition:border-color .15s,transform .15s;position:relative}
+.scen:hover{border-color:var(--accent);transform:translateY(-2px)}
+.scen-n{position:absolute;top:14px;right:16px;font-stretch:75%;font-weight:800;font-size:28px;color:var(--rule)}
+.scen b{font-stretch:85%;font-size:21px;line-height:1.1}
+.scen-sub{color:var(--accent);font-weight:650;font-size:13.5px}
+.scen p{margin:8px 0 12px;color:var(--ink-2);font-size:13.5px;flex:1}
+.scen-foot{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--rule-2);padding-top:10px;font-size:12.5px;color:var(--ink-3)}
+.demo-note{margin-top:22px}
+/* guided flow */
+.demo-sub{font-stretch:100%;font-weight:500;font-size:16px;color:var(--ink-3)}
+.stepper{display:flex;align-items:center;gap:6px;margin:4px 0 16px;flex-wrap:wrap}
+.stepper a{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink-3);font-weight:650;padding:8px 14px 8px 8px;border-radius:99px;border:1px solid var(--rule);background:var(--panel)}
+.stepper a span{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--rule-2);color:var(--ink-2);font-size:13px}
+.stepper a.done span{background:var(--ok-bg);color:var(--ok)}
+.stepper a.on{border-color:var(--accent);color:var(--ink)} .stepper a.on span{background:var(--accent);color:var(--accent-ink)}
+.stepper i{flex:0 0 18px;height:2px;background:var(--rule)}
+.bs-switch{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 16px}
+.bs-switch a{display:flex;flex-direction:column;text-decoration:none;color:var(--ink-2);border:1px solid var(--rule);background:var(--panel);border-radius:10px;padding:8px 14px}
+.bs-switch a span{font-size:12px;color:var(--ink-3)}
+.bs-switch a[aria-selected="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);color:var(--ink)}
+.bs-switch-note{font-size:12.5px;margin-left:4px}
+.demo-body{max-width:1100px}
+.explain{background:var(--hi);border-left:4px solid var(--accent);padding:12px 16px;border-radius:8px;margin-bottom:16px;color:var(--ink);font-size:15px}
+.explain.strong{font-size:16px}
+.demo-kv{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+.demo-kv div b{font-size:15.5px}
+table.demo-t{font-size:14.5px}
+table.demo-t tr.cur td{background:var(--hi)}
+.tree{display:flex;flex-direction:column;gap:0}
+.tree-root{display:flex;gap:12px;align-items:baseline}.tree-root b{font-size:17px}.tree-root span{color:var(--ink-3)}
+.tree-leaf{display:flex;gap:12px;align-items:baseline;text-decoration:none;color:var(--ink);margin-left:14px;padding:10px 0 4px 20px;border-left:2px solid var(--rule);position:relative}
+.tree-leaf::before{content:"";position:absolute;left:0;top:22px;width:14px;border-top:2px solid var(--rule)}
+.tree-leaf b{color:var(--accent)} .tree-leaf span{color:var(--ink-2)}
+.tree-leaf:hover b{text-decoration:underline}
+.portion{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.portion-cell{flex:1 1 150px;border:1px solid var(--rule);border-radius:10px;padding:10px 14px}
+.portion-cell small{display:block;color:var(--ink-3)} .portion-cell b{font-size:20px;font-stretch:88%}
+.portion-cell.hl{border-color:var(--accent);background:var(--hi)}
+.portion-bar{display:flex;height:30px;border-radius:6px;overflow:hidden;background:var(--rule-2);font-size:12px;font-weight:650}
+.portion-bar span{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;color:#fff}
+.p-here{background:var(--accent)} .p-other{background:var(--c-pass)} .p-rem{background:transparent;color:var(--ink-3)!important;border:1px dashed var(--ink-3);border-radius:0 6px 6px 0}
+.bd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.bd-card{margin-bottom:0}
+.ledger{display:flex;flex-direction:column}
+.lg-row{display:flex;justify-content:space-between;gap:14px;padding:5px 0;font-size:14.5px}
+.lg-row b{font-weight:600;white-space:nowrap}
+.lg-row.ind > span:first-child{padding-left:16px;color:var(--ink-2)}
+.lg-row.sub{border-top:1px solid var(--ink-3);margin-top:3px;padding-top:7px;font-weight:700}
+.lg-row.sub b{font-weight:750}
+.lg-row.ae,.lg-row.ns{border-radius:6px;padding:8px 10px;margin:4px -10px;font-weight:700}
+.lg-row.ae{background:color-mix(in srgb,var(--c-ae) 14%,transparent)} .lg-row.ae b{color:var(--c-ae)}
+.lg-row.ns{background:color-mix(in srgb,var(--c-ns) 14%,transparent)} .lg-row.ns b{color:var(--c-ns)}
+.lg-row.small{font-size:14px;border-bottom:1px solid var(--rule-2);padding:8px 0}
+.lg-row.pending b{color:var(--draft)}
+.lg-hd{font-size:12.5px;color:var(--ink-3);font-weight:650;margin-top:6px}
+.lg-note{font-size:13px;color:var(--ink-3);padding:5px 0;font-style:italic}
+.info{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;border:1px solid var(--ink-3);color:var(--ink-3);font-size:10px;font-weight:700;font-style:italic;cursor:help;position:relative;vertical-align:1px;font-family:Georgia,serif}
+.info:hover::after,.info:focus::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);width:max-content;max-width:240px;background:var(--ink);color:var(--bg);font:500 12.5px/1.35 var(--font);font-style:normal;padding:7px 10px;border-radius:6px;z-index:30;white-space:normal;text-align:left}
+.si-card{margin-top:14px}
+.si-flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center}
+.si-arrow{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;color:var(--ink-2);background:var(--hi);border-radius:10px;padding:14px}
+.si-arrow i{font-style:normal;font-size:22px;color:var(--accent)}
+.method-card{border:2px solid var(--c-reb);border-radius:12px;padding:18px 20px;margin-bottom:16px;background:var(--panel);position:relative}
+.method-tag{position:absolute;top:-11px;left:16px;background:var(--c-reb);color:#fff;font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px}
+.method-card h2{font-stretch:85%;font-size:22px;margin:4px 0 12px}
+.method-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
+.method-grid small{display:block;color:var(--ink-3)} .method-grid b{display:block;font-size:22px;font-stretch:88%;margin:2px 0} .method-grid span{color:var(--ink-2);font-size:13.5px}
+.method-arrow{font-size:28px;color:var(--c-reb)}
+.method-foot{margin:14px 0 0;font-weight:700;color:var(--c-reb)}
+.warn-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-bottom:16px}
+.warn-card{background:var(--draft-bg);border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:3px;font-size:13.5px;color:var(--ink)}
+.warn-card b{color:var(--draft);font-size:13px}
+.detail-wrap{margin-top:18px}
+.detail-wrap #detBox{margin-top:14px}
+.result-hd{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.result-hd h2{font-stretch:85%;font-size:22px}
+.result-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rc{border-radius:14px;padding:20px 22px;color:#fff}
+.rc small{display:flex;gap:6px;align-items:center;font-size:14px;opacity:.9}
+.rc .info{border-color:rgba(255,255,255,.7);color:#fff}
+.rc b{display:block;font-size:clamp(28px,4vw,40px);font-stretch:82%;font-weight:780;margin:4px 0}
+.rc span{opacity:.85}
+.rc-ae{background:var(--c-ae)} .rc-ns{background:var(--c-ns)}
+.result-bar{display:flex;height:16px;border-radius:99px;overflow:hidden;margin:12px 0 16px;background:var(--rule-2);font-size:11px;font-weight:700;color:#fff}
+.result-bar span{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden}
+.demo-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--rule);max-width:1100px}
+@media (max-width:980px){ .si-flow,.result-cards,.method-grid{grid-template-columns:1fr} .method-arrow{transform:rotate(90deg);justify-self:center} .bd-grid{grid-template-columns:1fr} .stepper i{display:none} }
+.mobnav{display:none}
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  aside{display:none}
+  .mobnav{display:flex;gap:8px;align-items:center;padding:10px 14px;background:var(--side);color:#fff}
+  .mobnav select{flex:1;background:var(--side-hi);color:#fff;border:0;border-radius:6px;padding:8px}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid3{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi{border-bottom:1px solid var(--rule-2)}
+  dialog .db{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="mobnav"><b style="font-stretch:75%;font-size:18px">NORMA</b><div class="modesw sm" role="group" aria-label="Mode"><button type="button" data-mode="demo">Demo</button><button type="button" data-mode="full">Full</button></div><select id="mobsel" aria-label="Go to"></select></div>
+  <aside>
+    <div class="logo">NORMA<small>Income distribution</small></div>
+    <div class="modesw" role="group" aria-label="Mode"><button type="button" data-mode="demo">Client Demo</button><button type="button" data-mode="full">Full System</button></div>
+    <div id="navDemo"></div>
+    <div id="navFull">
+    <div class="navsec">Income distribution</div>
+    <a href="#/statements" data-nav="statements">Billing statements <span class="n" id="nBS"></span></a>
+    <a href="#/statements/new" data-nav="new">New billing statement</a>
+    <a href="#/orders" data-nav="orders">Sales orders <span class="n" id="nSO"></span></a>
+    <a href="#/clients-summary" data-nav="clients-summary">Client summary</a>
+    <a href="#/journal" data-nav="journal">General journal</a>
+    <div class="navsec">Master data</div>
+    <a href="#/master/clients" data-nav="clients">Clients</a>
+    <a href="#/master/aes" data-nav="aes">Account executives</a>
+    <a href="#/master/rebaters" data-nav="rebaters">Rebaters</a>
+    <a href="#/master/suppliers" data-nav="suppliers">Suppliers</a>
+    <a href="#/master/gl" data-nav="gl">Chart of accounts</a>
+    <div class="navsec">Setup</div>
+    <a href="#/master/rules" data-nav="rules">Distribution rules</a>
+    <a href="#/settings" data-nav="settings">Fees &amp; rates</a>
+    </div>
+    <div class="side-foot"><button type="button" id="themeBtn">Switch theme</button></div>
+  </aside>
+  <main id="main"></main>
+</div>
+<dialog id="dlg"></dialog>
+<div class="toast" id="toast" role="status"></div>
+<script id="seed" type="application/json">{"aes":[{"code":"SAE001","name":"OE-MEAN ACUNA","type":"ext","person":"","payGL":"211201"},{"code":"SAE002","name":"OE-HEATHER PRICE","type":"ext","person":"","payGL":"211201"},{"code":"SAE003","name":"OE-WILFREDO LAURENTE","type":"ext","person":"","payGL":"211201"},{"code":"SAE004","name":"OE-CARMENCHU GANGARAMANI","type":"ext","person":"","payGL":"211201"},{"code":"SAE005","name":"OE-FELIZARDO JUAN","type":"ext","person":"","payGL":"211201"},{"code":"SAE006","name":"OE-GINA CABA","type":"ext","person":"","payGL":"211201"},{"code":"SAE007","name":"OE-MARIA VIENA AURE","type":"ext","person":"","payGL":"211201"},{"code":"SAE008","name":"OE-GEOFFREY CABA","type":"ext","person":"","payGL":"211201"},{"code":"SAE009","name":"OE-CYNTHIA NAKPIL","type":"ext","person":"","payGL":"211201"},{"code":"SAE010","name":"OE-DELIA CASTILLO","type":"ext","person":"","payGL":"211201"},{"code":"SAE011","name":"OE-GRACE ROLDAN","type":"ext","person":"","payGL":"211201"},{"code":"SAE012","name":"OE-LADY PANGILINAN","type":"ext","person":"","payGL":"211201"},{"code":"SAE013","name":"OE-THELMA DINOY","type":"ext","person":"","payGL":"211201"},{"code":"SAI001","name":"O1-BRIT AIR","type":"int","person":"Brenda Sieweke","payGL":"211109"},{"code":"SAI002","name":"O1-AIR NARU","type":"int","person":"Vicenta Dinglasan","payGL":"211109"},{"code":"SAI003","name":"O1-EASTERN AIRLINES","type":"int","person":"Pria Gonzales","payGL":"211109"},{"code":"SAI004","name":"O1-NIPPON AIR","type":"int","person":"Minda Santiago","payGL":"211109"},{"code":"SAI005","name":"O1-NORTHWEST AIRLINE","type":"int","person":"Shirley Romualdez","payGL":"211109"},{"code":"SOE001","name":"OE-ADRIA AIRWAYS","type":"emp","person":"Arnel Villarta","payGL":"211109"},{"code":"SOE002","name":"OE-PHILIPPINE AIRLINES","type":"emp","person":"Rose Marie Montiel","payGL":"211109"},{"code":"SOE003","name":"OE-CONTINENTAL AIRLINES","type":"emp","person":"Norma Cacho","payGL":"211109"},{"code":"SOE004","name":"OE-VARIG AIR","type":"emp","person":"Leony Guevarra","payGL":"211109"},{"code":"SOE005","name":"OE-CEBU PACIFIC","type":"emp","person":"Mean Acuna","payGL":"211109"},{"code":"SOE006","name":"OE-MIDDLE EAST AIRLINES","type":"emp","person":"Wilhelmina Dilag","payGL":"211109"},{"code":"SOE007","name":"OE-GHANA AIR","type":"emp","person":"Neng Gapate","payGL":"211109"},{"code":"SOE008","name":"OE-RENO AIR","type":"emp","person":"Geraldine Canuto","payGL":"211109"},{"code":"SOE009","name":"OE-ROYAL JORDANIAN","type":"emp","person":"Jimmy Dilag","payGL":"211109"},{"code":"SOE010","name":"OE- AIR INDIA","type":"emp","person":"Annie Cacho","payGL":"211109"},{"code":"SOE011","name":"OE-VIRGIN EXPRESS","type":"emp","person":"Rovelyn Ramos","payGL":"211109"},{"code":"SOE012","name":"OE-SWISS AIR","type":"emp","person":"Virginia Sering","payGL":"211109"},{"code":"SOE013","name":"OE-ETIHAD AIRWAYS","type":"emp","person":"Geraldine Mercado","payGL":"211109"},{"code":"SOE014","name":"OE-KUWAIT AIRWAYS","type":"emp","person":"Karen Kaye Mahigab","payGL":"211109"}],"rebaters":[{"code":"SOS008","name":"OS-VIRGIN ALTANTIC","client":"Veritas Maritime","amount":22.0,"currency":"USD","unit":"intl","note":"$22/INTL TICKET"},{"code":"SOS009","name":"OS-MALAYSIAN AIRLINES (M)","client":"Veritas Maritime","amount":10.0,"currency":"USD","unit":"intl","note":"$10/ INTL TICKET"},{"code":"SOS010","name":"OS-VERITAS-(F)","client":"Veritas Maritime","amount":3.0,"currency":"USD","unit":"intl","note":"$  3/INTL TICKET"},{"code":"SOS011","name":"OS-VIRGIN ALTANTIC","client":"K Line Roro Bulkship Management Co. Ltd-Rohq","amount":22.0,"currency":"USD","unit":"intl","note":"$22/INTL TICKET"},{"code":"SOS012","name":"OS-MALAYSIAN AIRLINES (M)","client":"K Line Roro Bulkship Management Co. Ltd-Rohq","amount":10.0,"currency":"USD","unit":"intl","note":"$10/ INTL TICKET"},{"code":"SOS013","name":"OS-VERITAS-(F)","client":"K Line Roro Bulkship Management Co. Ltd-Rohq","amount":3.0,"currency":"USD","unit":"intl","note":"$  3/INTL TICKET"},{"code":"SOS014","name":"OS-MALAYSIAN AIRLINES (G/N)","client":"K Line Roro Bulk Shipmanagement Co, Ltd","amount":10.0,"currency":"USD","unit":"intl","note":"$10/ INTL TICKET"},{"code":"SOS015","name":"OS-NS UNITED MARINE PHILIPPINES INC","client":"Ns United Marine Philippines Inc","amount":5.0,"currency":"USD","unit":"intl","note":"$5/ INTL TICKET"},{"code":"SOS016","name":"OS-LITHUANIAN AIRLNES","client":"Ns United Marine Philippines Inc","amount":5.0,"currency":"USD","unit":"intl","note":"$5/ INTL TICKET"},{"code":"SOS017","name":"OS-ALITALIA","client":"German Marine Agencies Inc","amount":10.0,"currency":"USD","unit":"intl","note":"$10/ INTL.TICKET"},{"code":"SOS018","name":"OS-PAN PACIFIC","client":"German Marine Agencies Inc","amount":20.0,"currency":"USD","unit":"intl","note":"$20/INTL TICKET"},{"code":"SOS019","name":"OS-PAN PACIFIC","client":"German Marine Agencies Inc","amount":300.0,"currency":"PHP","unit":"dom","note":"P300/ DOMESTIC TICKET"},{"code":"SOS020","name":"OS-FIN AIR","client":"Matagumpay Maritime","amount":10.0,"currency":"USD","unit":"intl","note":"$10/ INTL. TICKET"},{"code":"SOS021","name":"OS-MATAGUMPAY MARITIME","client":"Matagumpay Maritime","amount":5.0,"currency":"USD","unit":"intl","note":"$ 5/INTL. TICKET"},{"code":"SOS022","name":"OS-PACC","client":"Pacc","amount":10.0,"currency":"USD","unit":"intl","note":"$ 10/INTL. TICKET"},{"code":"SOS023","name":"OS-UMING SINGAPORE C/O PACC SHIPPING","client":"Uming Singapore C/O Pacc Shipping","amount":5.0,"currency":"USD","unit":"intl","note":"$ 5/INTL. TICKET"},{"code":"SOS024","name":"OS-UMING TAIWAN C/O PACC SHIPPING","client":"Uming Taiwan C/O Pacc Shipping","amount":5.0,"currency":"USD","unit":"intl","note":"$ 5/INTL. TICKET"},{"code":"SOS025","name":"OS-CREW ASIA","client":"Crew Asia","amount":5.0,"currency":"USD","unit":"intl","note":"$ 5/INTL TICKET"},{"code":"SOS026","name":"OS-HONGKONG AIRLINES","client":"Crew Asia","amount":10.0,"currency":"USD","unit":"intl","note":"$10/INTL TICKET"},{"code":"SOS027","name":"OS-MONARCH AIRLINES","client":"Eurasian Maritime","amount":5.0,"currency":"USD","unit":"intl","note":"$ 5/INTL TICKETT"},{"code":"SOS028","name":"OS- EURASIAN MARITIME","client":"Eurasian Maritime","amount":10.0,"currency":"USD","unit":"intl","note":"$10/INTL TICKET"},{"code":"SOS029","name":"OS-KLM Royal Dutch Airlines","client":"Phoenix Maritime Corp","amount":10.0,"currency":"USD","unit":"intl","note":"$10/ INTL TICKET"},{"code":"SOS030","name":"OS-PHOENIX MARITIME","client":"Phoenix Maritime Corp","amount":5.0,"currency":"USD","unit":"intl","note":"$ 5/INTL. TICKET"},{"code":"SOS031","name":"OS-CROSSWORLD","client":"Crossworld Marine Services","amount":50.0,"currency":"USD","unit":"intl","note":"$50 FOR TICKET FOR TICKET PRICE ABOVE $500.00","minUsd":500},{"code":"SOS032","name":"OS-CROSSWORLD","client":"Crossworld Marine Services","amount":30.0,"currency":"USD","unit":"intl","note":"$30 FOR TICKET PRICE  $300 > $500.00","minUsd":300,"maxUsd":500},{"code":"SOS033","name":"OS-CROSSWORLD","client":"Crossworld Marine Services","amount":15.0,"currency":"USD","unit":"intl","note":"$15 FOR TICKET PRICE BELOW $300.00","maxUsd":300},{"code":"SOS034","name":"OS-TRIP AIRLINE","client":"Bourbon Marine Services","amount":10.0,"currency":"USD","unit":"intl","note":"$10/ INTL TICKET"},{"code":"SOS035","name":"OS-BOURBON MARINE SERVICES","client":"Bourbon Marine Services","amount":50.0,"currency":"USD","unit":"intl","note":"$50 FOR TICKET FOR TICKET PRICE ABOVE $500.00","minUsd":500},{"code":"SOS036","name":"OS-BOURBON MARINE SERVICES","client":"Bourbon Marine Services","amount":30.0,"currency":"USD","unit":"intl","note":"$30 FOR TICKET PRICE  $300 > $500.00","minUsd":300,"maxUsd":500},{"code":"SOS037","name":"OS-BOURBON MARINE SERVICES","client":"Bourbon Marine Services","amount":15.0,"currency":"USD","unit":"intl","note":"$15 FOR TICKET PRICE BELOW $300.00","maxUsd":300},{"code":"SOS038","name":"OS-PAL MARITIME","client":"Pal Maritime Corporation","amount":20.0,"currency":"USD","unit":"intl","note":"$20/ INTL TICKET"},{"code":"SOS039","name":"OS-VIETNMAN AIRLINES","client":"Pal Maritime Corporation","amount":35.0,"currency":"USD","unit":"intl","note":"$35/INTL TICKET"},{"code":"SOS040","name":"OS-LAN AIRLINE","client":"Altamar Shipping Co. Inc","amount":5.0,"currency":"USD","unit":"intl","note":"$ 5/INTL. TICKET"},{"code":"SOS041","name":"OS-SYNERGIE GROUP OPERATIONS INC","client":"Synergygroup Operations Inc","amount":5.0,"currency":"USD","unit":"intl","note":"$ 5/INTL TICKET"},{"code":"SOS042","name":"OS- EUGINE VILA","client":"Sharp Phils","amount":5.0,"currency":"USD","unit":"intl","note":"$5/INTL TICKET"},{"code":"SOS043","name":"OS-HIRLYN BANSUELO","client":"Friedrich Naumann Foundation","amount":5.0,"currency":"USD","unit":"intl","note":"$5/INTL TICKET"},{"code":"SOS044","name":"OS-CELITO ARLEGUE","client":"Council Of Asian Liberals And Democrats","amount":5.0,"currency":"USD","unit":"intl","note":"$5/INTL TICKET"},{"code":"SOS045","name":"0S-ANA GOJOL","client":"Rieckermann Philippines, Inc.","amount":10.0,"currency":"USD","unit":"intl","note":"$10/INTL TICKET"},{"code":"SOS046","name":"OS-ARLETE DEMASUAY","client":"Erika Crewmanning Services Inc.","amount":10.0,"currency":"USD","unit":"intl","note":"$10/INTL TICKET"},{"code":"SOS047","name":"0S-ALTAMAR INTL SHIPPING CO,","client":"Altamar International Shipping Co. Inc.","amount":5.0,"currency":"USD","unit":"intl","note":"$5/INTL TICKET"},{"code":"SOS048","name":"OS-ALBAR SHIPPING&TRADING CORP","client":"Albar Shipping & Trading Corporation","amount":5.0,"currency":"USD","unit":"intl","note":"$5/INTL TICKET"}]}</script>
+<script>
+"use strict";
+const SEED=JSON.parse(document.getElementById('seed').textContent);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf=new Intl.NumberFormat('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const m=v=>{ v=Math.round((v||0)*100)/100; return v<0?'('+nf.format(-v)+')':nf.format(v); };
+const P=v=>'₱'+m(v);
+const r2=v=>Math.round((v||0)*100)/100;
+const uid=()=>Math.random().toString(36).slice(2,9);
+const today=()=>new Date().toISOString().slice(0,10);
+
+/* ======================= DATA ======================= */
+const PRODUCTS={air_intl:'Air – international',air_dom:'Air – domestic',hotel_intl:'Hotel – international',hotel_dom:'Hotel – domestic',insurance:'Travel insurance',docs:'Visa / documentation'};
+const SF_TYPES={sf_air_intl:'Service fee – air international',sf_air_dom:'Service fee – air domestic',sf_hotel:'Service fee – hotel / land',sf_docs:'Docs service fee'};
+const TYPE_LABEL={house:'House',int:'Internal AE',ext:'External AE',emp:'Employee'};
+const OPT={
+  adm:{margin:'Deduct from margin',ae:'Deduct from AE commission',none:'Not charged'},
+  dte:{margin:'Deduct from margin',after:'Deduct after staff reserve'},
+  rebate:{margin:'Paid out of the margin',ae:'Paid out of the AE share'},
+  domestic:{rate:'AE gets their normal rate',full:'AE gets 100% of margin net of VAT',placeholder:'Non-commissionable, ₱0.01 marker',none:'Non-commissionable'},
+  vat:{vat:'VATable (domestic supplier)',novat:'Non-VAT (foreign supplier)',misc:'Other income, VATable'},
+  cc:{separate:'Separate "Other misc fees" line',imputed:'Built into each selling price'},
+};
+const MODES={package:'Package',alacarte:'A la carte'};
+const PKG_TYPES=['Corporate travel','Leisure package','MICE','Group travel','—'];
+
+function defaultDB(){
+  const clients=[
+    {code:'CML-0001',name:'VE Pharma',type:'house',ae:'',twa:true},
+    {code:'CAI-0002',name:'ABC Corporation',type:'int',ae:'SAI002',twa:true},
+    {code:'CAI-0001',name:'Veritas Maritime Inc.',type:'int',ae:'SAI001',twa:true},
+    {code:'CAI-0003',name:'Luzon Pharma Distributors',type:'int',ae:'SAI003',twa:true},
+    {code:'CAE-0001',name:'Crew Asia',type:'ext',ae:'SAE001',twa:true},
+    {code:'CAY-0001',name:'Arnel Villarta (staff travel)',type:'emp',ae:'SOE001',twa:false},
+  ];
+  const map={'Veritas Maritime':'CAI-0001','Crew Asia':'CAE-0001'};
+  let n=1;
+  for(const r of SEED.rebaters){ if(!map[r.client]){ const code='CMM-'+String(n++).padStart(4,'0'); map[r.client]=code; clients.push({code,name:r.client,type:'house',ae:'',twa:true}); } }
+  const rebaters=SEED.rebaters.map(r=>({code:r.code,name:r.name,clientCode:map[r.client],amount:r.amount,currency:r.currency,unit:r.unit,minUsd:r.minUsd??'',maxUsd:r.maxUsd??'',note:r.note}));
+  const aes=SEED.aes.map(a=>({code:a.code,name:a.name,person:a.person,type:a.type,rateOverride:'',payGL:a.payGL}));
+  const suppliers=[
+    {code:'SAA-0001',name:'Philippine Airlines (PAL)',product:'air',vat:'vat',apGL:'211101',payeeIntl:'IATA',payeeDom:'Philippine Airlines',isPAL:true,short:'PAL'},
+    {code:'SAA-0002',name:'Cathay Pacific (CX)',product:'air',vat:'novat',apGL:'211101',payeeIntl:'IATA',payeeDom:'Cathay Pacific',isPAL:false,short:'CX'},
+    {code:'SAA-0003',name:'Cebu Pacific (5J)',product:'air',vat:'vat',apGL:'211101',payeeIntl:'IATA',payeeDom:'BDO Credit Card',isPAL:false,short:'5J'},
+    {code:'SHH-0001',name:'Radisson Blu (online)',product:'hotel',vat:'vat',apGL:'211102',payeeIntl:'BDO Credit Card',payeeDom:'BDO Credit Card',isPAL:false,short:'Radisson Blu'},
+    {code:'SHH-0002',name:'Marriott Hotel via TBO Holidays',product:'hotel',vat:'novat',apGL:'211102',payeeIntl:'TBO Holidays',payeeDom:'TBO Holidays',isPAL:false,short:'Marriott / TBO'},
+    {code:'SDI-0001',name:'Star Insurance',product:'insurance',vat:'misc',apGL:'211104',payeeIntl:'Star Insurance',payeeDom:'Star Insurance',isPAL:false,short:'Star Insurance'},
+    {code:'SDA-0001',name:'Arnel Villarta (documentation)',product:'docs',vat:'misc',apGL:'211103',payeeIntl:'Arnel Villarta',payeeDom:'Arnel Villarta',isPAL:false,short:'Docs – A. Villarta'},
+  ];
+  const gl=[
+    ['111200','Cash in Bank – Peso','Asset'],['113101','Accounts Receivable – Makati','Asset'],['113102','Accounts Receivable – SRO','Asset'],['113103','Accounts Receivable – Onsite BDO','Asset'],['113104','Accounts Receivable – Onsite SMIC','Asset'],['113105','Accounts Receivable – Non Revenue','Asset'],
+    ['113201','Accounts Receivable – Creditable Tax','Asset'],['114105','Creditable Tax – With 2307','Asset'],
+    ['211101','AP Airlines','Liability'],['211102','AP Hotel/Cruises','Liability'],['211103','AP Documentation','Liability'],['211104','AP Travel Insurance','Liability'],['211105','AP Credit Card','Liability'],['211108','AP – Rebates','Liability'],['211109','AP – OPSupplier','Liability'],
+    ['211201','Accrued Commission Income','Liability'],['211301','Refund Payable – Air','Liability'],['211302','Refund Payable – Others','Liability'],['211603','Output VAT','Liability'],
+    ['411101','Commission Income – VATable','Income'],['411102','Commission Income – Non-VATable','Income'],['411503','Other Miscellaneous Income','Income'],['412101','Service Fee – VATable','Income'],
+  ].map(([code,name,type])=>({code,name,type}));
+  const rules=[
+    {type:'house',label:'House / corporate',rate:0,adm:'none',dte:'margin',rebate:'margin',domestic:'rate',sfShare:true},
+    {type:'int',label:'Internal AE',rate:50,adm:'margin',dte:'margin',rebate:'ae',domestic:'placeholder',sfShare:true},
+    {type:'ext',label:'External AE',rate:50,adm:'none',dte:'margin',rebate:'ae',domestic:'full',sfShare:true},
+    {type:'emp',label:'Employee',rate:30,adm:'margin',dte:'margin',rebate:'margin',domestic:'rate',sfShare:true},
+  ];
+  const settings={roe:56,ipp:3,dte:4,adm:10,cc:3.8,vat:12,ewt:2,palcwt:2,reserve:15,bank:'BPI-Salcedo-PHP – CA 3771-0034-85',card:'BDO Credit Card'};
+
+  /* ---- sales orders (the booking) ---- */
+  const salesOrders=[], billingStatements=[], serviceInvoices=[];
+  let so=0, bs=0, si=0;
+  const SL=(product,supplier,desc,sp,cost,baseFare,pax,tickets)=>({id:uid(),product,supplier,desc,sp,cost,baseFare,pax,tickets});
+  const addSO=(o)=>{ so++; const x={id:uid(),no:'SO-2026-'+String(so).padStart(4,'0'),...o}; salesOrders.push(x); return x; };
+  // bill(soRecord, [[soLineIndex, overrides]], {date,payment,ccMode,notes,rebaters}, fees|null)
+  const bill=(o,parts,h,fees)=>{
+    bs++; const b={id:uid(),no:'BS-2026-'+String(bs).padStart(4,'0'),soId:o.id,status:'draft',payment:'card',ccMode:'separate',rebaters:[],notes:'',...h,
+      lines:parts.map(([i,ov])=>{ const s=o.lines[i]; return {id:uid(),soLineId:s.id,product:s.product,supplier:s.supplier,desc:s.desc,sp:s.sp,cost:s.cost,baseFare:s.baseFare,pax:s.pax,tickets:s.tickets,...(ov||{})}; })};
+    billingStatements.push(b);
+    if(fees){ si++; serviceInvoices.push({id:uid(),no:'SI-2026-'+String(si).padStart(4,'0'),bsId:b.id,date:b.date,fees:fees.map(([type,amount])=>({id:uid(),type,amount}))}); }
+    return b;
+  };
+  // ABC Corporation – one Sales Order billed in two partial Billing Statements
+  const so1=addSO({clientCode:'CAI-0002',date:'2026-09-21',mode:'package',packageType:'Corporate travel',route:'MNL–SIN–MNL',pax:4,notes:'Regional sales conference. 4 pax travel in two batches and are billed per batch.',
+    lines:[SL('air_intl','SAA-0001','PAL MNL–SIN–MNL, 4 pax (base fare ₱60,000)',100000,80000,60000,4,4),SL('hotel_intl','SHH-0002','Marriott Singapore, 2 rooms × 3 nights',40000,32000,0,2,0)]});
+  const b1=bill(so1,[[0,{desc:'PAL MNL–SIN–MNL, batch 1 (2 pax)',sp:50000,cost:40000,baseFare:30000,pax:2,tickets:2}],[1,{pax:2}]],{date:'2026-09-25',notes:'Batch 1: two travellers plus the hotel.',rebaters:[]},[['sf_air_intl',1254.40]]);
+  bill(so1,[[0,{desc:'PAL MNL–SIN–MNL, batch 2 (2 pax)',sp:50000,cost:40000,baseFare:30000,pax:2,tickets:2}]],{date:'2026-10-02',notes:'Batch 2: remaining two travellers.'},[['sf_air_intl',1254.40]]);
+  const so2=addSO({clientCode:'CAI-0002',date:'2026-10-01',mode:'alacarte',packageType:'—',route:'MNL–CEB',pax:1,notes:'Single domestic ticket.',
+    lines:[SL('air_dom','SAA-0001','PAL MNL–CEB (base fare ₱7,000)',10000,9000,7000,1,1)]});
+  bill(so2,[[0]],{date:'2026-10-03'},[['sf_air_dom',336]]);
+  // VE Pharma – house package (matches the CORPORATE HOUSE ACCT PACKAGE sheet)
+  const so3=addSO({clientCode:'CML-0001',date:'2026-09-28',mode:'package',packageType:'Leisure package',route:'MNL–LHR / MNL–HKG / MNL–CEB',pax:1,notes:'Mixed products package from the workbook.',
+    lines:[SL('air_intl','SAA-0001','PAL MNL–LHR (base fare ₱30,000)',50000,40000,30000,1,1),SL('air_dom','SAA-0001','PAL MNL–CEB (base fare ₱7,000)',10000,9000,7000,1,1),SL('air_intl','SAA-0002','CX MNL–HKG',50000,40000,0,1,1),SL('air_dom','SAA-0003','Cebu Pacific MNL–DVO, paid by card',5500,5000,0,1,1),SL('hotel_dom','SHH-0001','Radisson Blu, paid by card',5000,4500,0,1,0),SL('hotel_intl','SHH-0002','Marriott London, direct purchase',20000,16000,0,1,0),SL('insurance','SDI-0001','Travel insurance',2000,2000,0,1,0),SL('docs','SDA-0001','Schengen visa',5000,4500,0,1,0)]});
+  const b4=bill(so3,[[0],[1],[2],[3],[4],[5],[6],[7]],{date:'2026-09-30',notes:'Full package billed at once.'},[['sf_air_intl',3360],['sf_docs',2500]]);
+  // Veritas – corporate travel with rebaters (matches the INExternal Corporate Travel sheet)
+  const so4=addSO({clientCode:'CAI-0001',date:'2026-09-26',mode:'package',packageType:'Corporate travel',route:'MNL–NRT / MNL–HKG / domestic',pax:2,notes:'Crew rotation, 2 seafarers.',
+    lines:[SL('air_intl','SAA-0001','PAL intl, 2 pax (base fare ₱30,000)',50000,40000,30000,2,2),SL('air_intl','SAA-0002','CX intl, 2 pax',50000,35000,0,2,2),SL('air_dom','SAA-0001','PAL dom (base fare ₱7,000)',10000,9000,7000,1,1),SL('air_dom','SAA-0003','Cebu Pacific, paid by card',5500,5000,0,1,1)]});
+  const b5=bill(so4,[[0],[1],[2],[3]],{date:'2026-09-30',rebaters:['SOS008','SOS009','SOS010']},[['sf_air_intl',2508.80],['sf_air_dom',672]]);
+  // Crew Asia – external AE
+  const so5=addSO({clientCode:'CAE-0001',date:'2026-10-02',mode:'package',packageType:'Corporate travel',route:'MNL–DXB–MNL',pax:2,notes:'Crew deployment, 2 seafarers.',
+    lines:[SL('air_intl','SAA-0001','PAL MNL–DXB–MNL, 2 pax (base fare ₱30,000)',50000,40000,30000,2,2)]});
+  bill(so5,[[0]],{date:'2026-10-04',rebaters:['SOS025','SOS026']},[['sf_air_intl',2508.80]]);
+  // Employee – no companion service invoice
+  const so6=addSO({clientCode:'CAY-0001',date:'2026-10-03',mode:'package',packageType:'Leisure package',route:'MNL–LHR–MNL',pax:1,notes:'Staff personal travel.',
+    lines:[SL('air_intl','SAA-0001','PAL intl (base fare ₱30,000)',50000,40000,30000,1,1),SL('docs','SDA-0001','Visa processing',5000,4500,0,1,0)]});
+  bill(so6,[[0],[1]],{date:'2026-10-05',payment:'cash'},null);
+  // External AE – domestic a la carte
+  const so7=addSO({clientCode:'CAE-0001',date:'2026-10-04',mode:'alacarte',packageType:'—',route:'MNL–CEB–MNL',pax:2,notes:'Domestic tickets only.',
+    lines:[SL('air_dom','SAA-0001','PAL MNL–CEB–MNL, 2 pax (base fare ₱14,000)',20000,18000,14000,2,2)]});
+  bill(so7,[[0]],{date:'2026-10-05'},[['sf_air_dom',672]]);
+  // Internal AE – mixed products with service fee (INT AE sheet products)
+  const so8=addSO({clientCode:'CAI-0003',date:'2026-10-01',mode:'package',packageType:'Leisure package',route:'MNL–LHR–MNL',pax:1,notes:'Air, hotel, insurance and visa in one package.',
+    lines:[SL('air_intl','SAA-0001','PAL MNL–LHR (base fare ₱30,000)',50000,40000,30000,1,1),SL('hotel_intl','SHH-0002','Marriott London, direct purchase',20000,16000,0,1,0),SL('insurance','SDI-0001','Travel insurance',2000,2000,0,1,0),SL('docs','SDA-0001','Schengen visa',5000,4500,0,1,0)]});
+  bill(so8,[[0],[1],[2],[3]],{date:'2026-10-05'},[['sf_air_intl',3360],['sf_docs',2500]]);
+  const db={v:3,settings,rules,clients,aes,rebaters,suppliers,gl,salesOrders,billingStatements,serviceInvoices,seq:{so,bs,si}};
+  return {db,post:[b1.id,b4.id,b5.id]};
+}
+const KEY='norma-incdist-v3';
+let DB;
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(DB)); }catch(e){} }
+const by=(arr,k,v)=>arr.find(x=>x[k]===v);
+const client=c=>by(DB.clients,'code',c);
+const aeOf=c=>by(DB.aes,'code',c);
+const supplier=c=>by(DB.suppliers,'code',c);
+const glName=c=>(by(DB.gl,'code',c)||{}).name||'';
+const soById=id=>by(DB.salesOrders,'id',id);
+const bsById=id=>by(DB.billingStatements,'id',id);
+const soOf=bs=>soById(bs.soId)||{};
+const siOf=bs=>DB.serviceInvoices.find(s=>s.bsId===bs.id)||null;
+const clientOfBS=bs=>client(soOf(bs).clientCode)||{};
+const bsOfSO=soId=>DB.billingStatements.filter(b=>b.soId===soId).sort((a,b)=>a.no.localeCompare(b.no));
+function routeOf(lines){
+  const k=new Set(lines.filter(l=>/^(air|hotel)/.test(l.product)).map(l=>/intl$/.test(l.product)?'International':'Domestic'));
+  return k.size===2?'Mixed':k.size?[...k][0]:'—';
+}
+const paxOf=lines=>lines.reduce((a,l)=>Math.max(a,+l.pax||0),0);
+/* billed-to-date on a Sales Order line, across its Billing Statements (optionally replacing one statement's lines) */
+function billedOnSOLine(soLineId, overrideBs){
+  const t={sp:0,cost:0,pax:0,tickets:0,bs:[]};
+  for(const b of DB.billingStatements){
+    const lines = overrideBs && b.id===overrideBs.id ? overrideBs.lines : b.lines;
+    for(const l of lines) if(l.soLineId===soLineId){ t.sp+=+l.sp||0; t.cost+=+l.cost||0; t.pax+=+l.pax||0; t.tickets+=+l.tickets||0; t.bs.push(b.no); }
+  }
+  if(overrideBs && !DB.billingStatements.some(b=>b.id===overrideBs.id)) for(const l of overrideBs.lines) if(l.soLineId===soLineId){ t.sp+=+l.sp||0; t.cost+=+l.cost||0; t.pax+=+l.pax||0; t.tickets+=+l.tickets||0; t.bs.push('this statement'); }
+  return t;
+}
+function overbillWarnings(bs){
+  const so=soOf(bs); const out=[];
+  for(const sl of (so.lines||[])){
+    if(!bs.lines.some(l=>l.soLineId===sl.id)) continue;
+    const b=billedOnSOLine(sl.id,bs);
+    if(b.sp>sl.sp+0.004) out.push(`${sl.desc||PRODUCTS[sl.product]}: billed ${P(b.sp)} across statements, more than the ${P(sl.sp)} booked on ${so.no}.`);
+    else if(b.cost>sl.cost+0.004) out.push(`${sl.desc||PRODUCTS[sl.product]}: supplier cost billed (${P(b.cost)}) is more than booked on ${so.no} (${P(sl.cost)}).`);
+  }
+  return out;
+}
+
+/* ======================= ENGINE (per Billing Statement) ======================= */
+function ctxFor(bs){
+  if(bs.status==='posted' && bs.snapshot) return bs.snapshot;
+  const cl=clientOfBS(bs); const rule=by(DB.rules,'type',cl.type)||DB.rules[0]; const ae=aeOf(cl.ae);
+  const rate = ae && ae.rateOverride!=='' && ae.rateOverride!=null ? +ae.rateOverride : +rule.rate;
+  const si=siOf(bs);
+  return {settings:{...DB.settings},rule:{...rule},rate,client:{...cl},ae:ae?{...ae}:null,
+          suppliers:Object.fromEntries(bs.lines.map(l=>[l.supplier,supplier(l.supplier)]).filter(x=>x[1])),
+          rebaters:(bs.rebaters||[]).map(c=>by(DB.rebaters,'code',c)).filter(Boolean).map(x=>({...x})),
+          si: si?{no:si.no,date:si.date,fees:si.fees.map(f=>({...f}))}:null};
+}
+function compute(bs){
+  const C=ctxFor(bs), S=C.settings, R=C.rule, rate=(C.rate||0)/100, roe=+S.roe;
+  const ccF=x=> bs.payment==='card' ? x/(1-S.cc/100)-x : 0;
+  const vatF=x=> x/(1+S.vat/100)*(S.vat/100);
+  const warn=[];
+  // companion service invoice of THIS statement only
+  const isComm=t=>t==='sf_air_intl'||t==='sf_hotel';
+  const fees=((C.si&&C.si.fees)||[]).map(f=>{ const cc=ccF(+f.amount||0); const billed=bs.ccMode==='imputed'?(+f.amount)+cc:(+f.amount); const net=billed/(1+S.vat/100);
+    const ent = R.sfShare&&rate>0&&isComm(f.type) ? (+f.amount||0)/(1+S.vat/100)*rate : 0;
+    return {...f,cc,billed,net,vat:billed-net,ewt:C.client.twa?net*S.ewt/100:0,ent}; });
+  const sfShareTotal = fees.reduce((a,f)=>a+f.ent,0);
+  let sfLeft=sfShareTotal;
+  const lines=bs.lines.map(l=>{
+    const sup=C.suppliers[l.supplier]||{}; const intl=/intl$/.test(l.product); const air=/^air/.test(l.product); const comm=air||/^hotel/.test(l.product);
+    const sp=+l.sp||0, cost=+l.cost||0, pax=+l.pax||0, tix=+l.tickets||0;
+    const cc=ccF(sp); const billed=bs.ccMode==='imputed'?sp+cc:sp; const gm=billed-cost; const ccDed=bs.ccMode==='imputed'?cc:0;
+    const ipp=intl&&air?S.ipp*tix*roe:0, dte=intl&&air?S.dte*pax*roe:0, adm=intl&&comm&&R.adm!=='none'?S.adm*pax*roe:0;
+    const reb=[];
+    if(air){ for(const rb of C.rebaters){
+      if((rb.unit==='intl')!==intl) continue;
+      const tUsd = tix? sp/tix/roe : 0;
+      if(rb.minUsd!==''&&rb.minUsd!=null&&tUsd<=+rb.minUsd) continue;
+      if(rb.maxUsd!==''&&rb.maxUsd!=null&&tUsd>+rb.maxUsd) continue;
+      const amt=(+rb.amount)*(rb.currency==='USD'?roe:1)*tix; if(amt>0) reb.push({code:rb.code,name:rb.name,amt});
+    } }
+    const rebT=reb.reduce((a,x)=>a+x.amt,0);
+    const pwt=sup.isPAL&&C.client.twa?(+l.baseFare||0)*S.palcwt/100:0;
+    if(sup.isPAL&&C.client.twa&&!(+l.baseFare)) warn.push(`${l.desc||PRODUCTS[l.product]}: PAL base fare is missing, so the 2% withholding tax is zero.`);
+    const dteM=R.dte==='margin'?dte:0, admM=R.adm==='margin'?adm:0, rebM=R.rebate==='margin'?rebT:0;
+    const nm=gm-ccDed-ipp-dteM-admM-rebM-pwt;
+    const vat=comm?vatF(nm):0, ndm=nm-vat;
+    let share=0, placeholder=0, sfShare=0;
+    if(comm&&rate>0){
+      if(intl){ share=ndm*rate; if(sfLeft>0){ sfShare=sfLeft; sfLeft=0; } }
+      else if(R.domestic==='rate') share=ndm*rate;
+      else if(R.domestic==='full') share=ndm;
+      else if(R.domestic==='placeholder') placeholder=0.01;
+    }
+    const aeGross=share+sfShare;
+    const rebAE=R.rebate==='ae'&&aeGross>0?rebT:0, rebNS=R.rebate==='ae'&&aeGross<=0?rebT:0;
+    const admAE=R.adm==='ae'&&aeGross>0?adm:0;
+    const aeNet=aeGross-rebAE-admAE+placeholder;
+    if(aeNet<-0.004) warn.push(`${l.desc||PRODUCTS[l.product]}: rebates are larger than the AE's share, so the AE income is negative.`);
+    const ns=nm-aeGross-placeholder-rebNS;
+    const reserve=comm&&intl?ns*S.reserve/100:0;
+    const dteA=R.dte==='after'?dte:0;
+    const accrued=ns-reserve-dteA;
+    if(cost>sp) warn.push(`${l.desc||PRODUCTS[l.product]}: supplier cost is higher than the selling price.`);
+    return {...l,sup,intl,air,comm,sp,cost,cc,billed,gm,ccDed,ipp,dte,adm,admCharged:admM+admAE,reb,rebT,pwt,nm,vat,ndm,share,sfShare,placeholder,aeGross,rebAE,admAE,aeNet,ns,reserve,dteA,accrued};
+  });
+  if(sfLeft>0.004) warn.push('The companion service invoice has an international fee, but this statement has no international air or hotel line to charge the AE\u2019s fee share against, so it was not paid.');
+  const sum=k=>lines.reduce((a,l)=>a+(l[k]||0),0);
+  const ccLines=sum('cc'), ccFees=fees.reduce((a,f)=>a+f.cc,0), ccTotal=ccLines+ccFees;
+  const bsTotal = bs.ccMode==='separate' ? sum('sp')+ccTotal : sum('billed');
+  const siTotal = fees.reduce((a,f)=>a+f.billed,0);
+  const ewt = fees.reduce((a,f)=>a+f.ewt,0);
+  const T={sp:sum('sp'),cost:sum('cost'),gm:sum('gm'),ipp:sum('ipp'),dte:sum('dte'),adm:sum('admCharged'),reb:sum('rebT'),pwt:sum('pwt'),nm:sum('nm'),vat:sum('vat'),ae:sum('aeNet'),aeGross:sum('aeGross'),ns:sum('ns'),reserve:sum('reserve'),accrued:sum('accrued'),cc:ccTotal,bs:bsTotal,si:siTotal,ewt,sfEnt:sfShareTotal};
+  return {C,lines,fees,T,warn,je:journals(bs,C,lines,fees,T)};
+}
+function journals(bs,C,lines,fees,T){
+  const S=C.settings, cl=C.client, out=[], si=C.si;
+  const agg=(arr)=>{ const mp=new Map(); for(const e of arr){ if(Math.abs(e.dr||0)<0.005&&Math.abs(e.cr||0)<0.005) continue; const k=e.gl+'|'+e.sl+'|'+(e.dr?'d':'c'); const x=mp.get(k); if(x){ x.dr=(x.dr||0)+(e.dr||0); x.cr=(x.cr||0)+(e.cr||0); } else mp.set(k,{...e}); } return [...mp.values()]; };
+  const s=[{gl:'113101',sl:`${cl.code} ${cl.name}`,dr:T.bs,memo:'Billing statement '+bs.no}];
+  for(const l of lines) s.push({gl:l.sup.apGL||'211101',sl:(l.intl?l.sup.payeeIntl:l.sup.payeeDom)||l.sup.name,cr:l.cost,memo:'Supplier cost – '+(l.sup.short||l.sup.name)});
+  const ccInSales = bs.ccMode==='separate' ? T.cc : lines.reduce((a,l)=>a+l.cc,0);
+  s.push({gl:'211109',sl:S.card,cr:ccInSales,memo:`${S.cc}% card merchant fee`});
+  s.push({gl:'211101',sl:'UCPB GEN',cr:T.ipp,memo:'Ticket IPP'});
+  s.push({gl:'211109',sl:'DIP-UCPB',cr:T.dte,memo:'Ticket DTE'});
+  s.push({gl:'211109',sl:'ACWT',cr:T.pwt,memo:'2% PAL withholding tax (client is a withholding agent)'});
+  s.push({gl:'211109',sl:'SOS001 Various Supplier',cr:T.adm,memo:'Admin (ADM) fee'});
+  if(C.ae) s.push({gl:C.ae.payGL||'211109',sl:`${C.ae.code} ${C.ae.name}`,cr:T.ae,memo:'AE / employee income'});
+  for(const l of lines) for(const r of l.reb) s.push({gl:'211108',sl:`${r.code} ${r.name}`,cr:r.amt,memo:'Rebate'});
+  for(const l of lines) if(l.reserve) s.push({gl:'211109',sl:l.air?'OPS-IATA':'OPS-Misc. Hotel Supplier',cr:l.reserve,memo:`${S.reserve}% staff error reserve`});
+  for(const l of lines) s.push({gl:'211201',sl:l.sup.short||l.sup.name,cr:l.accrued,memo:'Accrued commission (North Star income)'});
+  out.push({title:`Sales journal – ${bs.no}`,doc:bs.no,lines:agg(s)});
+  if(fees.length&&si){
+    const vat=fees.reduce((a,f)=>a+f.vat,0);
+    const e=[{gl:'113101',sl:`${cl.code} ${cl.name}`,dr:T.si-T.ewt,memo:cl.twa?'Fee + VAT, less 2% withheld':'Fee + VAT'},{gl:'113201',sl:`${cl.code} ${cl.name}`,dr:T.ewt,memo:`${S.ewt}% creditable tax withheld by client`}];
+    for(const f of fees){ const revenue = bs.ccMode==='imputed' ? f.net - f.cc/(1+S.vat/100) : f.net; e.push({gl:f.type==='sf_docs'?'411503':'412101',sl:`${cl.code} ${cl.name}`,cr:revenue,memo:SF_TYPES[f.type]+' net of VAT'}); }
+    const vatOut = bs.ccMode==='imputed' ? fees.reduce((a,f)=>a+f.vat-(f.cc-f.cc/(1+S.vat/100)),0) : vat;
+    e.push({gl:'211603',sl:`${cl.code} ${cl.name}`,cr:vatOut,memo:`${S.vat}% output VAT`});
+    if(bs.ccMode==='imputed'){ const ccf=fees.reduce((a,f)=>a+f.cc,0); if(ccf) e.push({gl:'211109',sl:S.card,cr:ccf,memo:'Card fee billed inside the service fee'}); }
+    out.push({title:`Service invoice – ${si.no} (companion to ${bs.no})`,doc:si.no,lines:agg(e)});
+  }
+  const rc=[];
+  const bySup=new Map(); for(const l of lines){ const k=l.supplier; bySup.set(k,{sup:l.sup,amt:(bySup.get(k)?.amt||0)+l.accrued}); }
+  for(const {sup,amt} of bySup.values()){
+    if(Math.abs(amt)<0.005) continue;
+    rc.push({gl:'211201',sl:sup.short||sup.name,dr:amt,memo:'Clear accrued commission'});
+    if(sup.vat==='novat') rc.push({gl:'411102',sl:sup.short||sup.name,cr:amt,memo:'Foreign supplier – no VAT'});
+    else { const net=amt/(1+S.vat/100); rc.push({gl:sup.vat==='misc'?'411503':'411101',sl:sup.short||sup.name,cr:net,memo:'Commission income net of VAT'}); rc.push({gl:'211603',sl:sup.short||sup.name,cr:amt-net,memo:`${S.vat}% output VAT`}); }
+  }
+  out.push({title:`Income recognition – ${bs.no}`,doc:bs.no,lines:rc});
+  const cr=[{gl:'111200',sl:S.bank,dr:T.bs+(T.si-T.ewt)-(bs.payment==='card'?T.cc:0),memo:'Amount deposited'}];
+  if(bs.payment==='card') cr.push({gl:'211109',sl:S.card,dr:T.cc,memo:'Merchant fee withheld by the card acquirer'});
+  cr.push({gl:'114105',sl:`${cl.code} ${cl.name}`,dr:T.ewt,memo:'Creditable tax (BIR 2307)'});
+  cr.push({gl:'113101',sl:`${cl.code} ${cl.name}`,cr:T.bs,memo:'Billing statement '+bs.no});
+  if(fees.length&&si) cr.push({gl:'113101',sl:`${cl.code} ${cl.name}`,cr:T.si-T.ewt,memo:'Service invoice '+si.no});
+  cr.push({gl:'113201',sl:`${cl.code} ${cl.name}`,cr:T.ewt,memo:'Clear creditable tax receivable'});
+  out.push({title:`Cash receipt – ${bs.no}${si?' + '+si.no:''}`,doc:bs.no,lines:agg(cr)});
+  for(const j of out){ j.dr=j.lines.reduce((a,x)=>a+(x.dr||0),0); j.cr=j.lines.reduce((a,x)=>a+(x.cr||0),0); j.ok=Math.abs(r2(j.dr)-r2(j.cr))<0.015; }
+  return out;
+}
+/* posting locks THIS statement (and its companion SI) only */
+function postBS(bs){ const C=ctxFor({...bs,status:'draft'}); bs.snapshot=JSON.parse(JSON.stringify(C)); bs.status='posted'; bs.postedAt=new Date().toISOString(); }
+const resultCache=new Map();
+function result(bs){ return compute(bs); }
+
+/* ======================= ROUTER ======================= */
+const routes=[
+  [/^\/statements\/new(?:\/([\w-]+))?$/,mm=>bsForm(null,mm[1])],
+  [/^\/statements\/([\w-]+)\/edit$/,mm=>bsForm(mm[1])],
+  [/^\/statements\/([\w-]+)$/,mm=>bsView(mm[1])],
+  [/^\/statements$/,()=>bsList()],
+  [/^\/orders\/new$/,()=>soForm(null)],
+  [/^\/orders\/([\w-]+)\/edit$/,mm=>soForm(mm[1])],
+  [/^\/orders\/([\w-]+)$/,mm=>soView(mm[1])],
+  [/^\/orders$/,()=>soList()],
+  [/^\/clients-summary\/(.+)$/,mm=>clientSummary(decodeURIComponent(mm[1]))],
+  [/^\/clients-summary$/,()=>clientList()],
+  [/^\/journal$/,()=>journalPage()],
+  [/^\/master\/(\w+)$/,mm=>masterPage(mm[1])],
+  [/^\/settings$/,()=>settingsPage()],
+  [/^\/demo\/(\w+)\/(\d)(?:\/([\w-]+))?$/,mm=>demoView(mm[1],mm[2],mm[3])],
+  [/^\/demo$/,()=>demoHome()],
+];
+function route(){
+  let h=(location.hash||'').slice(1);
+  if(MODE==='demo' && !h.startsWith('/demo')){ h='/demo'; try{ history.replaceState(null,'','#/demo'); }catch(e){} }
+  if(MODE!=='demo' && (h.startsWith('/demo')||!h)){ h='/statements'; try{ history.replaceState(null,'','#/statements'); }catch(e){} }
+  let ok=false; for(const [re,fn] of routes){ const mm=re.exec(h); if(mm){ fn(mm); ok=true; break; } }
+  if(!ok) bsList();
+  const seg=h.split('/')[1]||'statements';
+  const key = h.startsWith('/statements/new')?'new': seg==='master'?h.split('/')[2]: seg==='demo'?(h.split('/')[2]?'demo-'+h.split('/')[2]:'demo'): seg;
+  document.querySelectorAll('aside a').forEach(a=>a.classList.toggle('on',a.dataset.nav===key));
+  const opt=[...$('mobsel').options].find(o=>o.dataset.nav===key); if(opt) $('mobsel').value=opt.value;
+  $('nBS').textContent=DB.billingStatements.length; $('nSO').textContent=DB.salesOrders.length;
+  $('main').scrollTop=0;
+}
+addEventListener('hashchange',route);
+$('mobsel').onchange=e=>location.hash=e.target.value;
+const page=html=>{ $('main').innerHTML=`<div class="page">${html}</div>`; };
+let tt; const toast=msg=>{ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2800); };
+const typeTag=t=>`<span class="tag t-${t}">${TYPE_LABEL[t]||t}</span>`;
+const statusTag=s=>`<span class="tag ${s}">${s==='posted'?'Posted':'Draft'}</span>`;
+const modeTag=m=>`<span class="tag mode">${MODES[m]||'—'}</span>`;
+const aeLabel=(C)=>C.ae?`${esc(C.ae.name)}${C.ae.person?`<div class="muted">${esc(C.ae.person)}</div>`:''}`:'<span class="muted">—</span>';
+const splitBar=T=>{ const g=T.gm||1; return `<div class="bar" title="Share of gross margin">${[[T.ipp+T.dte+T.adm,'var(--c-pass)'],[T.reb,'var(--c-reb)'],[T.pwt,'var(--c-tax)'],[T.ae,'var(--c-ae)'],[T.reserve,'var(--c-res)'],[T.accrued,'var(--c-ns)']].map(([v,c])=>v>0?`<span style="width:${v/g*100}%;background:${c}"></span>`:'').join('')}</div>`; };
+const hierarchy=()=>`<div class="hier" aria-label="How records relate"><span>Client</span><i>→</i><span>Sales Order</span><i>→</i><span class="on">Billing Statement</span><i>→</i><span>Income Distribution</span><i>+</i><span>Companion Service Invoice</span></div>`;
+
+/* ======================= BILLING STATEMENTS (main list) ======================= */
+let bsFilter={q:'',type:'',status:'',client:'',group:true};
+function bsList(){
+  const rows=DB.billingStatements.map(bs=>({bs,so:soOf(bs),r:compute(bs)}));
+  page(`<div class="head"><div><h1>Income distribution</h1><p class="sub">Income distribution is calculated per billing statement. A client can have many sales orders, and each sales order can be billed in several statements; each one is calculated, posted and journalised on its own.</p></div>
+    <div class="btns"><a class="btn" href="#/orders/new">New sales order</a><a class="btn primary" href="#/statements/new">New billing statement</a></div></div>
+    ${hierarchy()}
+    <div class="kpis" id="kpis"></div>
+    <div class="filters">
+      <input class="i" id="fq" type="search" placeholder="Search BS no., client, SO no. or AE" value="${esc(bsFilter.q)}">
+      <select class="i" id="fc"><option value="">All clients</option>${[...new Set(rows.map(x=>x.so.clientCode))].map(c=>client(c)).filter(Boolean).sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<option value="${c.code}" ${bsFilter.client===c.code?'selected':''}>${esc(c.name)}</option>`).join('')}</select>
+      <select class="i" id="ft"><option value="">All account types</option>${Object.entries(TYPE_LABEL).map(([k,v])=>`<option value="${k}" ${bsFilter.type===k?'selected':''}>${v}</option>`).join('')}</select>
+      <select class="i" id="fs"><option value="">Any status</option><option value="draft" ${bsFilter.status==='draft'?'selected':''}>Draft</option><option value="posted" ${bsFilter.status==='posted'?'selected':''}>Posted</option></select>
+      <label class="chk" style="margin-left:4px"><input type="checkbox" id="fg" ${bsFilter.group?'checked':''}> Group by client</label>
+    </div>
+    <div class="card"><div class="tw"><table class="t nw"><thead><tr><th>Billing statement</th><th>Date</th><th>Client</th><th>Sales order</th><th>AE / employee</th><th>Account</th><th>Mode</th><th>Route</th><th class="r">Lines</th><th class="r">Billing amount</th><th class="r">AE income</th><th class="r">North Star income</th><th>Split</th><th>Status</th></tr></thead><tbody id="bsbody"></tbody></table></div></div>
+    <p class="muted">Group totals and the figures above add up the individual statement results. Nothing is recalculated at client or sales-order level.</p>`);
+  const draw=()=>{
+    const q=bsFilter.q.toLowerCase();
+    const f=rows.filter(({bs,so,r})=>{ const cl=r.C.client; const hay=[bs.no,cl.name,cl.code,so.no,r.C.ae?r.C.ae.name+' '+r.C.ae.person:'',(siOf(bs)||{}).no||''].join(' ').toLowerCase();
+      return (!q||hay.includes(q))&&(!bsFilter.type||cl.type===bsFilter.type)&&(!bsFilter.status||bs.status===bsFilter.status)&&(!bsFilter.client||so.clientCode===bsFilter.client); });
+    const sum=(arr,k)=>arr.reduce((a,x)=>a+x.r.T[k],0);
+    $('kpis').innerHTML=`<div class="kpi"><b>${f.length}</b><small>Billing statements</small></div>
+      <div class="kpi"><b>${P(sum(f,'bs'))}</b><small>Billed on statements</small></div>
+      <div class="kpi"><b>${P(sum(f,'ae'))}</b><small><i style="background:var(--c-ae)"></i>AE / employee income</small></div>
+      <div class="kpi"><b>${P(sum(f,'reserve'))}</b><small><i style="background:var(--c-res)"></i>Staff error reserve</small></div>
+      <div class="kpi"><b>${P(sum(f,'accrued'))}</b><small><i style="background:var(--c-ns)"></i>North Star income</small></div>`;
+    const row=({bs,so,r})=>`<tr class="click" data-id="${bs.id}"><td style="white-space:nowrap"><b>${esc(bs.no)}</b>${siOf(bs)?`<div class="muted mono">↔ ${esc(siOf(bs).no)}</div>`:''}</td><td style="white-space:nowrap">${esc(bs.date)}</td>
+      <td><a href="#/clients-summary/${encodeURIComponent(so.clientCode)}" data-stop>${esc(r.C.client.name)}</a><div class="muted mono">${esc(r.C.client.code)}</div></td>
+      <td style="white-space:nowrap"><a href="#/orders/${so.id}" data-stop>${esc(so.no)}</a></td><td>${aeLabel(r.C)}</td><td>${typeTag(r.C.client.type)}</td><td>${modeTag(so.mode)}</td><td>${routeOf(bs.lines)}</td>
+      <td class="r">${bs.lines.length}</td><td class="r">${m(r.T.bs)}</td><td class="r">${m(r.T.ae)}</td><td class="r"><b>${m(r.T.accrued)}</b></td><td>${splitBar(r.T)}</td>
+      <td>${statusTag(bs.status)}${r.je.every(j=>j.ok)?'':' <span class="tag bad">Unbalanced</span>'}</td></tr>`;
+    let html='';
+    if(!f.length) html=`<tr><td colspan="14" class="empty">No billing statements match. Clear the filters, or create a statement from a sales order.</td></tr>`;
+    else if(bsFilter.group){
+      const groups=new Map(); for(const x of f){ const k=x.so.clientCode; if(!groups.has(k)) groups.set(k,[]); groups.get(k).push(x); }
+      for(const [code,list] of [...groups.entries()].sort((a,b)=>(client(a[0])||{}).name.localeCompare((client(b[0])||{}).name))){
+        const cl=client(code)||{};
+        list.sort((a,b)=>a.so.no.localeCompare(b.so.no)||a.bs.no.localeCompare(b.bs.no));
+        html+=`<tr class="grp"><td colspan="9"><a href="#/clients-summary/${encodeURIComponent(code)}">${esc(cl.name)}</a> · ${list.length} statement${list.length>1?'s':''} on ${new Set(list.map(x=>x.so.id)).size} sales order${new Set(list.map(x=>x.so.id)).size>1?'s':''}</td><td class="r">${m(sum(list,'bs'))}</td><td class="r">${m(sum(list,'ae'))}</td><td class="r">${m(sum(list,'accrued'))}</td><td colspan="2" class="muted">Sum of statements</td></tr>`;
+        html+=list.map(row).join('');
+      }
+    } else html=f.sort((a,b)=>b.bs.no.localeCompare(a.bs.no)).map(row).join('');
+    $('bsbody').innerHTML=html;
+    $('bsbody').querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=e=>{ if(e.target.closest('[data-stop]')) return; location.hash='#/statements/'+tr.dataset.id; });
+  };
+  draw();
+  $('fq').oninput=e=>{ bsFilter.q=e.target.value; draw(); };
+  $('fc').onchange=e=>{ bsFilter.client=e.target.value; draw(); };
+  $('ft').onchange=e=>{ bsFilter.type=e.target.value; draw(); };
+  $('fs').onchange=e=>{ bsFilter.status=e.target.value; draw(); };
+  $('fg').onchange=e=>{ bsFilter.group=e.target.checked; draw(); };
+}
+
+/* ======================= BILLING STATEMENT DETAIL ======================= */
+let bsTab='dist';
+function bsView(id){
+  const bs=bsById(id); if(!bs){ page('<div class="empty">That billing statement no longer exists. <a href="#/statements">Back to income distribution</a></div>'); return; }
+  const so=soOf(bs), r=compute(bs), C=r.C, T=r.T, draft=bs.status==='draft', si=siOf(bs);
+  const siblings=bsOfSO(so.id);
+  const warns=[...r.warn,...overbillWarnings(bs)];
+  page(`<div class="crumbs"><a href="#/statements">Income distribution</a> / <a href="#/clients-summary/${encodeURIComponent(so.clientCode)}">${esc(C.client.name)}</a> / <a href="#/orders/${so.id}">${esc(so.no)}</a> / ${esc(bs.no)}</div>
+  <div class="head"><div><h1>${esc(bs.no)} ${statusTag(bs.status)}</h1><p class="sub">${esc(C.client.name)} · ${esc(so.no)} · ${typeTag(C.client.type)} ${C.ae?'· '+esc(C.ae.name)+(C.ae.person?' ('+esc(C.ae.person)+')':''):''}</p></div>
+    <div class="btns">
+      ${draft?`<a class="btn" href="#/statements/${bs.id}/edit">Edit</a><button class="btn primary" id="bPost" ${r.je.every(j=>j.ok)?'':'disabled'}>Post statement</button><button class="btn danger" id="bDel">Delete</button>`:`<button class="btn" id="bUnpost">Return to draft</button>`}
+      <a class="btn" href="#/statements/new/${so.id}">New statement for ${esc(so.no)}</a>
+    </div></div>
+  ${warns.map(w=>`<div class="alert warn">${esc(w)}</div>`).join('')}
+  ${!draft?`<div class="alert info">Posted ${esc((bs.postedAt||'').slice(0,10))}. This statement${si?' and '+esc(si.no):''} use the rates and rules locked at posting (${C.rate}% commission, ROE ${C.settings.roe}). Other statements on ${esc(so.no)} are not affected.</div>`:''}
+  <div class="card"><div class="card-b kv">
+    <div><small>Billing statement</small><b>${esc(bs.no)}</b></div>
+    <div><small>Client</small><b><a href="#/clients-summary/${encodeURIComponent(so.clientCode)}">${esc(C.client.name)}</a></b></div>
+    <div><small>Client code</small><b class="mono">${esc(C.client.code)}</b></div>
+    <div><small>Sales order</small><b><a href="#/orders/${so.id}">${esc(so.no)}</a></b><span class="muted"> · statement ${siblings.findIndex(x=>x.id===bs.id)+1} of ${siblings.length}</span></div>
+    <div><small>AE / employee</small><b>${C.ae?esc(C.ae.code+' '+C.ae.name):'—'}</b>${C.ae&&C.ae.person?`<div class="muted">${esc(C.ae.person)}</div>`:''}</div>
+    <div><small>Account type</small><b>${typeTag(C.client.type)}</b></div>
+    <div><small>Transaction mode</small><b>${MODES[so.mode]||'—'}</b></div>
+    <div><small>Package type</small><b>${esc(so.packageType||'—')}</b></div>
+    <div><small>Route</small><b>${routeOf(bs.lines)}</b><div class="muted">${esc(so.route||'')}</div></div>
+    <div><small>Pax on this statement</small><b>${paxOf(bs.lines)}</b><span class="muted"> of ${so.pax||'—'} booked</span></div>
+    <div><small>Date</small><b>${esc(bs.date)}</b></div>
+    <div><small>Payment</small><b>${bs.payment==='card'?'Credit card':'Cash / bank'}</b>${bs.payment==='card'?`<div class="muted">${OPT.cc[bs.ccMode]}</div>`:''}</div>
+    <div><small>Commission rate</small><b>${C.rate}%</b></div>
+    <div><small>Withholding agent (TWA)</small><b>${C.client.twa?'Yes':'No'}</b></div>
+    <div><small>Companion service invoice</small><b>${si?esc(si.no):'None'}</b></div>
+    <div><small>Rebaters</small><b>${C.rebaters.length?C.rebaters.map(x=>esc(x.code)).join(', '):'None'}</b></div>
+  </div>${bs.notes?`<div class="card-b muted" style="border-top:1px solid var(--rule-2)">${esc(bs.notes)}</div>`:''}</div>
+  <div class="kpis">
+    <div class="kpi"><b>${P(T.bs)}</b><small>Billing statement</small></div>
+    <div class="kpi"><b>${si?P(T.si):'—'}</b><small>${si?'Service invoice '+esc(si.no):'No service invoice'}</small></div>
+    <div class="kpi"><b>${P(T.ae)}</b><small><i style="background:var(--c-ae)"></i>AE / employee income</small></div>
+    <div class="kpi"><b>${P(T.reserve)}</b><small><i style="background:var(--c-res)"></i>Staff error reserve</small></div>
+    <div class="kpi"><b>${P(T.accrued)}</b><small><i style="background:var(--c-ns)"></i>North Star income</small></div>
+  </div>
+  <div class="tabs" role="tablist">${[['dist','Income distribution'],['si','Companion service invoice'],['je','Journal entries'],['pay','Payables'],['docs','Documents']].map(([k,l])=>`<button role="tab" data-t="${k}" aria-selected="${bsTab===k}">${l}</button>`).join('')}</div>
+  <div id="tabp"></div>`);
+  const drawTab=()=>{ $('tabp').innerHTML= bsTab==='je'?jeHTML(r.je): bsTab==='pay'?payHTML(r): bsTab==='docs'?docsHTML(bs,so,r): bsTab==='si'?siHTML(bs,r): distHTML(r); document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===bsTab)); };
+  document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{ bsTab=b.dataset.t; drawTab(); });
+  drawTab();
+  if(draft){
+    $('bPost').onclick=()=>{ postBS(bs); save(); toast(bs.no+' posted. Other statements on '+so.no+' are unchanged.'); route(); };
+    $('bDel').onclick=()=>{ if(confirm('Delete '+bs.no+(si?' and its service invoice '+si.no:'')+'? This cannot be undone.')){ DB.billingStatements=DB.billingStatements.filter(x=>x!==bs); DB.serviceInvoices=DB.serviceInvoices.filter(x=>x.bsId!==bs.id); save(); toast(bs.no+' deleted'); location.hash='#/orders/'+so.id; } };
+  } else $('bUnpost').onclick=()=>{ bs.status='draft'; delete bs.snapshot; save(); toast(bs.no+' returned to draft. It now uses the current rules and rates.'); route(); };
+}
+function distHTML(r){
+  const L=r.lines;
+  const yes=l=>l.comm?'<span class="tag posted">Yes</span>':'<span class="tag draft">No</span>';
+  const cols=[['Selling','sp'],['Card surcharge','cc'],['Supplier cost','cost'],['Base fare','baseFare'],['Pax','pax','n'],['Tickets','tickets','n'],['Commissionable','comm','yn'],['Gross margin','gm'],['IPP','ipp'],['DTE','dte'],['Admin fee','admCharged'],['Rebates','rebT'],['Supplier CWT','pwt'],['Net margin','nm'],['VAT','vat'],['Net distributable','ndm'],['AE share','share'],['Service fee allocation','sfShare'],['AE income (net)','aeNet'],['Staff error','reserve'],['North Star final','accrued']];
+  const cell=(l,c)=> c[2]==='yn'?yes(l): c[2]==='n'?(l[c[1]]||'<span class="muted">–</span>') : (l[c[1]]?m(l[c[1]]):'<span class="muted">–</span>');
+  const tot=c=> c[2]==='yn'?'': c[2]==='n'?L.reduce((a,l)=>a+(+l[c[1]]||0),0) : m(L.reduce((a,l)=>a+(+l[c[1]]||0),0));
+  return `<div class="card"><div class="card-h"><h2>Product lines and income distribution</h2><span class="muted">This statement only. Amounts in ₱.</span></div>
+  <div class="tw"><table class="t"><thead><tr><th style="min-width:250px">Product / supplier / description</th>${cols.map(c=>`<th class="r">${c[0]}</th>`).join('')}</tr></thead><tbody>
+  ${L.map(l=>`<tr><td><b>${esc(l.desc||PRODUCTS[l.product])}</b><div class="muted">${PRODUCTS[l.product]} · ${esc(l.sup.short||l.sup.name||'—')}</div>${l.soLineId?'':'<div class="muted">Not on the sales order</div>'}</td>${cols.map(c=>`<td class="r">${cell(l,c)}</td>`).join('')}</tr>`).join('')}
+  </tbody><tfoot><tr><td>Statement total</td>${cols.map(c=>`<td class="r">${tot(c)}</td>`).join('')}</tr></tfoot></table></div></div>
+  <p class="muted">Rules for ${TYPE_LABEL[r.C.client.type]} accounts: rebates – ${OPT.rebate[r.C.rule.rebate]}; admin fee – ${OPT.adm[r.C.rule.adm]}; DTE – ${OPT.dte[r.C.rule.dte]}; domestic lines – ${OPT.domestic[r.C.rule.domestic]}. The AE's service-fee entitlement from this statement's companion invoice is allocated to its first international line, as in the workbook.</p>`;
+}
+function siHTML(bs,r){
+  const si=r.C.si;
+  if(!si) return `<div class="card"><div class="empty"><b style="color:var(--ink)">No companion service invoice</b><br>This billing statement has no service fees, so the AE has no service-fee entitlement on it.${bs.status==='draft'?`<br><br><a class="btn" href="#/statements/${bs.id}/edit">Add a service invoice</a>`:''}</div></div>`;
+  const fees=r.fees, S=r.C.settings;
+  return `<div class="card"><div class="card-h"><div><h2>${esc(si.no)}</h2><span class="muted">Companion to ${esc(bs.no)} · dated ${esc(si.date)}</span></div><span class="tag posted">Linked 1 : 1</span></div>
+  <div class="tw"><table class="t"><thead><tr><th>Service fee</th><th class="r">Service fee</th><th class="r">Card surcharge</th><th class="r">Billed</th><th class="r">VAT ${S.vat}%</th><th class="r">Net service fee</th><th class="r">Withheld ${S.ewt}%</th><th class="r">AE entitlement</th></tr></thead><tbody>
+  ${fees.map(f=>`<tr><td>${SF_TYPES[f.type]}${f.ent?'':`<div class="muted">${f.type==='sf_air_intl'||f.type==='sf_hotel'?'No AE share for this account type':'Not shared with the AE'}</div>`}</td><td class="r">${m(f.amount)}</td><td class="r">${m(f.cc)}</td><td class="r">${m(f.billed)}</td><td class="r">${m(f.vat)}</td><td class="r">${m(f.net)}</td><td class="r">${m(f.ewt)}</td><td class="r"><b>${m(f.ent)}</b></td></tr>`).join('')}
+  </tbody><tfoot><tr><td>Total</td><td class="r">${m(fees.reduce((a,f)=>a+(+f.amount||0),0))}</td><td class="r">${m(fees.reduce((a,f)=>a+f.cc,0))}</td><td class="r">${m(r.T.si)}</td><td class="r">${m(fees.reduce((a,f)=>a+f.vat,0))}</td><td class="r">${m(fees.reduce((a,f)=>a+f.net,0))}</td><td class="r">${m(r.T.ewt)}</td><td class="r">${m(r.T.sfEnt)}</td></tr></tfoot></table></div></div>
+  <p class="muted">AE entitlement = international service fee ÷ ${1+S.vat/100} × ${r.C.rate}%. It is paid through ${esc(bs.no)}'s sales journal and reduces North Star's share on that statement only.</p>`;
+}
+function jeHTML(js){
+  return js.map(j=>`<div class="card je"><div class="card-h"><b>${esc(j.title)}</b>${j.ok?'<span class="tag posted">Balanced</span>':`<span class="tag bad">Out by ${P(Math.abs(j.dr-j.cr))}</span>`}</div><div class="tw"><table class="t"><thead><tr><th>GL</th><th>Account</th><th>Subsidiary ledger</th><th class="r">Debit</th><th class="r">Credit</th><th>Memo</th></tr></thead><tbody>
+  ${j.lines.map(x=>`<tr><td class="mono">${x.gl}</td><td>${esc(glName(x.gl))}</td><td>${esc(x.sl)}</td><td class="r">${x.dr?m(x.dr):''}</td><td class="r">${x.cr?m(x.cr):''}</td><td class="muted">${esc(x.memo)}</td></tr>`).join('')}
+  </tbody><tfoot><tr><td colspan="3">Total</td><td class="r">${m(j.dr)}</td><td class="r">${m(j.cr)}</td><td></td></tr></tfoot></table></div></div>`).join('');
+}
+function payHTML(r){
+  const grp=new Map(); const add=(who,gl,amt,what)=>{ if(Math.abs(amt)<0.005) return; const k=who+'|'+gl; const x=grp.get(k)||{who,gl,amt:0,what}; x.amt+=amt; grp.set(k,x); };
+  for(const l of r.lines){ add((l.intl?l.sup.payeeIntl:l.sup.payeeDom)||l.sup.name,l.sup.apGL,l.cost,'Supplier'); for(const b of l.reb) add(b.code+' '+b.name,'211108',b.amt,'Rebater'); if(l.reserve) add(l.air?'OPS-IATA':'OPS-Misc. Hotel Supplier','211109',l.reserve,'Staff error reserve'); }
+  if(r.C.ae) add(r.C.ae.code+' '+r.C.ae.name+(r.C.ae.person?' ('+r.C.ae.person+')':''),r.C.ae.payGL||'211109',r.T.ae,'AE / employee');
+  add(r.C.settings.card,'211109',r.T.cc,'Card acquirer'); add('UCPB GEN','211101',r.T.ipp,'Pass-through'); add('DIP-UCPB','211109',r.T.dte,'Pass-through'); add('ACWT','211109',r.T.pwt,'Tax'); add('SOS001 Various Supplier','211109',r.T.adm,'Admin fee');
+  const rows=[...grp.values()];
+  return `<div class="card"><div class="card-h"><h2>Who gets paid from this statement</h2><span class="muted">From its sales journal</span></div><div class="tw"><table class="t"><thead><tr><th>Payee</th><th>Type</th><th>GL</th><th class="r">Amount</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${esc(x.who)}</td><td>${x.what}</td><td class="mono">${x.gl}</td><td class="r">${m(x.amt)}</td></tr>`).join('')}<tr class="grp"><td>North Star accrued income</td><td>Income</td><td class="mono">211201</td><td class="r">${m(r.T.accrued)}</td></tr></tbody><tfoot><tr><td colspan="3">Total credits</td><td class="r">${m(rows.reduce((a,x)=>a+x.amt,0)+r.T.accrued)}</td></tr></tfoot></table></div></div>`;
+}
+function docsHTML(bs,so,r){
+  const C=r.C, si=C.si;
+  const bsRows=r.lines.map(l=>[l.desc||PRODUCTS[l.product],bs.ccMode==='imputed'?l.billed:l.sp]);
+  if(bs.ccMode==='separate'&&r.T.cc) bsRows.push(['Other miscellaneous fees (credit card surcharge)',r.T.cc]);
+  return `<div class="doc"><h3>Billing statement ${esc(bs.no)}</h3><div class="muted">Reimbursable costs · Sales order ${esc(so.no)}</div><div class="meta"><div><b>${esc(C.client.name)}</b><br>${esc(C.client.code)}</div><div>${esc(bs.no)}<br>${esc(bs.date)}</div></div>
+   <table class="t"><thead><tr><th>Description</th><th class="r">Amount</th></tr></thead><tbody>${bsRows.map(([d,a])=>`<tr><td>${esc(d)}</td><td class="r">${m(a)}</td></tr>`).join('')}</tbody><tfoot><tr><td>Total due</td><td class="r">${P(r.T.bs)}</td></tr></tfoot></table></div>
+  ${si?`<div class="doc"><h3>Service invoice ${esc(si.no)}</h3><div class="muted">VAT invoice · companion to ${esc(bs.no)}</div><div class="meta"><div><b>${esc(C.client.name)}</b><br>${esc(C.client.code)}</div><div>${esc(si.no)}<br>${esc(si.date)}</div></div>
+   <table class="t"><thead><tr><th>Description</th><th class="r">Amount</th></tr></thead><tbody>${r.fees.map(f=>`<tr><td>${SF_TYPES[f.type]}</td><td class="r">${m(f.billed)}</td></tr>`).join('')}
+   <tr><td class="muted">VATable sales</td><td class="r muted">${m(r.fees.reduce((a,f)=>a+f.net,0))}</td></tr><tr><td class="muted">VAT ${C.settings.vat}%</td><td class="r muted">${m(r.fees.reduce((a,f)=>a+f.vat,0))}</td></tr>
+   ${C.client.twa?`<tr><td class="muted">Less ${C.settings.ewt}% withholding tax</td><td class="r muted">(${m(r.T.ewt)})</td></tr>`:''}</tbody><tfoot><tr><td>Amount due</td><td class="r">${P(r.T.si-r.T.ewt)}</td></tr></tfoot></table></div>`:`<div class="doc"><h3>Service invoice</h3><p class="muted" style="margin:0">No companion service invoice for ${esc(bs.no)}.</p></div>`}`;
+}
+
+/* ---------- billing statement form ---------- */
+function nextNo(kind){ DB.seq[kind]=(DB.seq[kind]||0)+1; return ({so:'SO',bs:'BS',si:'SI'})[kind]+'-2026-'+String(DB.seq[kind]).padStart(4,'0'); }
+function bsForm(id,soIdParam){
+  const orig=id?bsById(id):null;
+  if(orig&&orig.status==='posted'){ toast('Posted statements are locked. Return it to draft first.'); location.hash='#/statements/'+id; return; }
+  const bs=orig?JSON.parse(JSON.stringify(orig)):{id:uid(),no:'',soId:soIdParam||'',date:today(),payment:'card',ccMode:'separate',status:'draft',notes:'',lines:[],rebaters:[]};
+  const origSI=orig?siOf(orig):null;
+  const si=origSI?JSON.parse(JSON.stringify(origSI)):{id:uid(),no:'',bsId:bs.id,date:bs.date,fees:[]};
+  let hasSI=!!origSI || (!orig);
+  if(!orig && !si.fees.length) si.fees.push({id:uid(),type:'sf_air_intl',amount:0});
+  if(!orig && bs.soId){ const so=soById(bs.soId); if(so){ const cl=client(so.clientCode); bs.rebaters=DB.rebaters.filter(r=>r.clientCode===so.clientCode).map(r=>r.code); } }
+  const soOpts=()=>`<option value="">Select a sales order…</option>`+[...new Set(DB.salesOrders.map(s=>s.clientCode))].map(c=>client(c)).filter(Boolean).sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<optgroup label="${esc(c.name)}">${DB.salesOrders.filter(s=>s.clientCode===c.code).map(s=>`<option value="${s.id}" ${bs.soId===s.id?'selected':''}>${esc(s.no)} · ${MODES[s.mode]} · ${esc(s.route)}</option>`).join('')}</optgroup>`).join('');
+  page(`<div class="crumbs"><a href="#/statements">Income distribution</a> / ${orig?esc(orig.no)+' / Edit':'New billing statement'}</div>
+  <div class="head"><div><h1>${orig?'Edit '+esc(orig.no):'New billing statement'}</h1><p class="sub">Bill all or part of a sales order. Only the amounts on this statement are distributed, so the same booking is never counted twice.</p></div>
+  <div class="btns"><a class="btn" href="${orig?'#/statements/'+orig.id:(bs.soId?'#/orders/'+bs.soId:'#/statements')}">Cancel</a><button class="btn primary" id="bSave">Save draft</button></div></div>
+  <div class="card"><div class="card-h"><h2>Sales order and payment</h2></div><div class="card-b grid4">
+    <label class="f" style="grid-column:span 2">Sales order<select class="i" id="fSO" ${orig?'disabled':''}>${soOpts()}</select>${orig?'<span class="hint">A statement stays on the sales order it was created for.</span>':''}</label>
+    <label class="f">Client<input class="i" id="fClient" readonly></label>
+    <label class="f">Account type<input class="i" id="fType" readonly></label>
+    <label class="f">AE / employee<input class="i" id="fAE" readonly></label>
+    <label class="f">Commission rate<input class="i" id="fRate" readonly></label>
+    <label class="f">Withholding agent (TWA)<input class="i" id="fTWA" readonly></label>
+    <label class="f">Transaction mode / route<input class="i" id="fMode" readonly></label>
+    <label class="f">Statement date<input class="i" type="date" id="fDate" value="${esc(bs.date)}"></label>
+    <label class="f">Payment<select class="i" id="fPay"><option value="card" ${bs.payment==='card'?'selected':''}>Credit card (${esc(DB.settings.card)})</option><option value="cash" ${bs.payment==='cash'?'selected':''}>Cash / bank transfer</option></select></label>
+    <label class="f">Card surcharge billing<select class="i" id="fCC">${Object.entries(OPT.cc).map(([k,v])=>`<option value="${k}" ${bs.ccMode===k?'selected':''}>${v}</option>`).join('')}</select></label>
+    <label class="f">Notes<input class="i" id="fNotes" value="${esc(bs.notes)}" placeholder="Optional"></label>
+  </div></div>
+  <div class="card"><div class="card-h"><h2>Bill from the sales order</h2><span class="muted" id="soHint"></span></div><div class="tw"><table class="t"><thead><tr><th>Booked line</th><th class="r">Booked selling</th><th class="r">Booked cost</th><th class="r">Pax</th><th class="r">Billed on other statements</th><th class="r">On this statement</th><th class="r">Remaining selling</th><th style="min-width:150px">Progress</th><th></th></tr></thead><tbody id="soBody"></tbody></table></div></div>
+  <div class="card"><div class="card-h"><h2>Lines on this statement</h2><button class="btn sm" id="bAddLine" type="button">Add line not on the sales order</button></div>
+    <div class="tw"><table class="t edit"><thead><tr><th style="min-width:170px">Product</th><th style="min-width:190px">Supplier</th><th style="min-width:200px">Description</th><th class="r" style="min-width:110px">Selling</th><th class="r" style="min-width:110px">Supplier cost</th><th class="r" style="min-width:110px">PAL base fare</th><th class="r" style="width:70px">Pax</th><th class="r" style="width:76px">Tickets</th><th></th></tr></thead><tbody id="lineBody"></tbody></table></div></div>
+  <div class="grid3" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+    <div class="card"><div class="card-h"><h2>Companion service invoice</h2><label class="chk"><input type="checkbox" id="fHasSI" ${hasSI?'checked':''}> Issue ${esc(si.no||'a new SI')}</label></div><div id="siBox"></div></div>
+    <div class="card"><div class="card-h"><h2>Rebaters</h2><span class="muted" id="rebHint"></span></div><div class="card-b" id="rebBox"></div></div>
+  </div>
+  <div class="card"><div class="card-h"><h2>Preview – this statement only</h2><span class="muted">Not saved until you click Save draft</span></div><div class="card-b" id="preview"></div></div>`);
+  const prodOpts=v=>Object.entries(PRODUCTS).map(([k,l])=>`<option value="${k}" ${v===k?'selected':''}>${l}</option>`).join('');
+  const supOpts=(p,v)=>{ const kind=p.startsWith('air')?'air':p.startsWith('hotel')?'hotel':p; return `<option value="">Select…</option>`+DB.suppliers.filter(s=>s.product===kind).map(s=>`<option value="${s.code}" ${v===s.code?'selected':''}>${esc(s.name)}</option>`).join(''); };
+  const drawSO=()=>{
+    const so=soById(bs.soId);
+    if(!so){ $('soBody').innerHTML='<tr><td colspan="9" class="muted">Pick a sales order to see its booked lines.</td></tr>'; $('soHint').textContent=''; return; }
+    $('soHint').textContent=`${so.no} · ${so.pax||'—'} pax booked · ${bsOfSO(so.id).filter(b=>b.id!==bs.id).length} other statement(s)`;
+    $('soBody').innerHTML=so.lines.map(sl=>{
+      const others={sp:0,cost:0,pax:0}; for(const b of DB.billingStatements) if(b.id!==bs.id) for(const l of b.lines) if(l.soLineId===sl.id){ others.sp+=+l.sp||0; others.cost+=+l.cost||0; others.pax+=+l.pax||0; }
+      const here=bs.lines.filter(l=>l.soLineId===sl.id).reduce((a,l)=>a+(+l.sp||0),0);
+      const rem=sl.sp-others.sp-here; const pctO=Math.min(100,others.sp/sl.sp*100), pctH=Math.min(100-pctO,here/sl.sp*100);
+      return `<tr><td><b>${esc(sl.desc||PRODUCTS[sl.product])}</b><div class="muted">${PRODUCTS[sl.product]} · ${esc((supplier(sl.supplier)||{}).short||'')}</div></td><td class="r">${m(sl.sp)}</td><td class="r">${m(sl.cost)}</td><td class="r">${sl.pax}</td><td class="r">${m(others.sp)}</td><td class="r">${m(here)}</td><td class="r ${rem<-0.004?'neg':''}"><b>${m(rem)}</b></td>
+        <td><div class="bar" style="height:8px"><span style="width:${pctO}%;background:var(--c-pass)"></span><span style="width:${pctH}%;background:var(--accent)"></span></div></td>
+        <td class="r">${rem>0.004?`<button class="btn sm" type="button" data-addrem="${sl.id}">Add remaining</button>`:'<span class="muted">Fully billed</span>'}</td></tr>`;
+    }).join('');
+  };
+  const drawLines=()=>{
+    $('lineBody').innerHTML=bs.lines.length?bs.lines.map((l,i)=>`<tr data-i="${i}"><td><select class="i" data-k="product" ${l.soLineId?'disabled':''}>${prodOpts(l.product)}</select>${l.soLineId?'<div class="muted" style="font-size:12px;margin-top:3px">From sales order</div>':''}</td><td><select class="i" data-k="supplier" ${l.soLineId?'disabled':''}>${supOpts(l.product,l.supplier)}</select></td><td><input class="i" data-k="desc" value="${esc(l.desc)}" placeholder="Route, hotel, passenger…"></td>
+      <td><input class="i num" type="number" step="0.01" data-k="sp" value="${l.sp||''}"></td><td><input class="i num" type="number" step="0.01" data-k="cost" value="${l.cost||''}"></td>
+      <td><input class="i num" type="number" step="0.01" data-k="baseFare" value="${l.baseFare||''}" ${(supplier(l.supplier)||{}).isPAL?'':'disabled placeholder="PAL only"'}></td>
+      <td><input class="i num" type="number" min="0" data-k="pax" value="${l.pax}"></td><td><input class="i num" type="number" min="0" data-k="tickets" value="${l.tickets}" ${l.product.startsWith('air')?'':'disabled'}></td>
+      <td><button class="btn sm danger" type="button" data-del="${i}" aria-label="Remove line">✕</button></td></tr>`).join(''):`<tr><td colspan="9" class="muted">No lines yet. Use “Add remaining” above to bill a sales-order line, then reduce the amounts for a partial bill.</td></tr>`;
+  };
+  const drawSI=()=>{
+    if(!hasSI){ $('siBox').innerHTML='<div class="card-b muted">No companion service invoice. The AE gets no service-fee entitlement on this statement.</div>'; return; }
+    $('siBox').innerHTML=`<div class="tw"><table class="t edit"><thead><tr><th>Fee</th><th class="r">Amount incl. VAT</th><th></th></tr></thead><tbody>${si.fees.map((f,i)=>`<tr data-i="${i}"><td><select class="i" data-k="type">${Object.entries(SF_TYPES).map(([k,v])=>`<option value="${k}" ${f.type===k?'selected':''}>${v}</option>`).join('')}</select></td><td><input class="i num" type="number" step="0.01" data-k="amount" value="${f.amount||''}"></td><td><button class="btn sm danger" type="button" data-del="${i}" aria-label="Remove fee">✕</button></td></tr>`).join('')}</tbody></table></div><div class="card-b" style="padding-top:8px"><button class="btn sm" type="button" id="bAddFee">Add fee</button></div>`;
+    $('bAddFee').onclick=()=>{ si.fees.push({id:uid(),type:'sf_air_intl',amount:0}); drawSI(); };
+  };
+  const drawReb=()=>{
+    const so=soById(bs.soId); const code=so?so.clientCode:'';
+    const list=DB.rebaters.filter(r=>r.clientCode===code);
+    bs.rebaters=bs.rebaters.filter(c=>list.some(r=>r.code===c));
+    $('rebHint').textContent=code?(list.length?'Linked to this client':''):'Pick a sales order first';
+    $('rebBox').innerHTML=list.length?list.map(r=>`<label class="chk" style="margin-bottom:6px"><input type="checkbox" value="${r.code}" ${bs.rebaters.includes(r.code)?'checked':''}> <span><b>${esc(r.code)}</b> ${esc(r.name)} <span class="muted">· ${r.currency==='USD'?'$':'₱'}${r.amount} per ${r.unit==='intl'?'intl':'domestic'} ticket</span></span></label>`).join(''):`<p class="muted" style="margin:0">${code?'This client has no rebaters.':'—'}</p>`;
+    $('rebBox').querySelectorAll('input').forEach(cb=>cb.onchange=()=>{ bs.rebaters=[...$('rebBox').querySelectorAll('input:checked')].map(x=>x.value); preview(); });
+  };
+  const head=()=>{
+    const so=soById(bs.soId); const cl=so?client(so.clientCode):null; const rule=cl?by(DB.rules,'type',cl.type):null; const ae=cl?aeOf(cl.ae):null;
+    $('fClient').value=cl?`${cl.code} ${cl.name}`:''; $('fType').value=cl?TYPE_LABEL[cl.type]:''; $('fAE').value=ae?`${ae.code} ${ae.name}${ae.person?' ('+ae.person+')':''}`:(cl?'None':'');
+    $('fTWA').value=cl?(cl.twa?'Yes – 2% withheld':'No'):''; $('fRate').value=cl?((ae&&ae.rateOverride!==''?ae.rateOverride:rule.rate)+'%'):''; $('fMode').value=so?`${MODES[so.mode]} · ${so.route}`:'';
+    $('fCC').disabled=bs.payment!=='card';
+  };
+  // temporary SI attached for preview
+  const previewBS=()=>({...bs,status:'draft'});
+  const withTempSI=(fn)=>{ const saved=DB.serviceInvoices; DB.serviceInvoices=saved.filter(x=>x.bsId!==bs.id).concat(hasSI?[{...si,bsId:bs.id,no:si.no||'(new SI)'}]:[]); try{ return fn(); } finally{ DB.serviceInvoices=saved; } };
+  const preview=()=>{
+    drawSO();
+    if(!bs.soId){ $('preview').innerHTML='<p class="muted" style="margin:0">Pick a sales order to see the distribution.</p>'; return; }
+    if(!bs.lines.length){ $('preview').innerHTML='<p class="muted" style="margin:0">Add at least one line.</p>'; return; }
+    if(bs.lines.some(l=>!l.supplier)){ $('preview').innerHTML='<p class="muted" style="margin:0">Pick a supplier on every line to see the distribution.</p>'; return; }
+    const r=withTempSI(()=>compute(previewBS())); const ob=overbillWarnings(bs);
+    $('preview').innerHTML=`${[...r.warn,...ob].map(w=>`<div class="alert warn">${esc(w)}</div>`).join('')}<div class="kpis" style="margin-bottom:12px">
+      <div class="kpi"><b>${P(r.T.bs)}</b><small>This billing statement</small></div><div class="kpi"><b>${P(r.T.gm)}</b><small>Gross margin</small></div>
+      <div class="kpi"><b>${P(r.T.ae)}</b><small><i style="background:var(--c-ae)"></i>AE income</small></div><div class="kpi"><b>${P(r.T.reserve)}</b><small><i style="background:var(--c-res)"></i>Staff error</small></div><div class="kpi"><b>${P(r.T.accrued)}</b><small><i style="background:var(--c-ns)"></i>North Star income</small></div></div>
+      ${r.je.every(j=>j.ok)?'<span class="tag posted">All journal entries balance</span>':'<span class="tag bad">A journal entry does not balance</span>'}`;
+  };
+  drawLines(); drawSI(); drawReb(); head(); preview();
+  $('fSO').onchange=e=>{ bs.soId=e.target.value; bs.lines=bs.lines.filter(l=>!l.soLineId); const so=soById(bs.soId); bs.rebaters=so?DB.rebaters.filter(r=>r.clientCode===so.clientCode).map(r=>r.code):[]; head(); drawReb(); drawLines(); preview(); };
+  $('fPay').onchange=e=>{ bs.payment=e.target.value; head(); preview(); };
+  $('fCC').onchange=e=>{ bs.ccMode=e.target.value; preview(); };
+  $('fDate').onchange=e=>{ bs.date=e.target.value; if(!si.no) si.date=bs.date; };
+  $('fNotes').oninput=e=>bs.notes=e.target.value;
+  $('fHasSI').onchange=e=>{ hasSI=e.target.checked; if(hasSI&&!si.fees.length) si.fees.push({id:uid(),type:'sf_air_intl',amount:0}); drawSI(); preview(); };
+  $('soBody').addEventListener('click',e=>{ const b=e.target.closest('[data-addrem]'); if(!b) return; const so=soById(bs.soId); const sl=so.lines.find(x=>x.id===b.dataset.addrem);
+    const o={sp:0,cost:0,pax:0,tickets:0,base:0}; for(const x of DB.billingStatements) if(x.id!==bs.id) for(const l of x.lines) if(l.soLineId===sl.id){ o.sp+=+l.sp||0; o.cost+=+l.cost||0; o.pax+=+l.pax||0; o.tickets+=+l.tickets||0; o.base+=+l.baseFare||0; }
+    for(const l of bs.lines) if(l.soLineId===sl.id){ o.sp+=+l.sp||0; o.cost+=+l.cost||0; o.pax+=+l.pax||0; o.tickets+=+l.tickets||0; o.base+=+l.baseFare||0; }
+    bs.lines.push({id:uid(),soLineId:sl.id,product:sl.product,supplier:sl.supplier,desc:sl.desc,sp:r2(sl.sp-o.sp),cost:r2(sl.cost-o.cost),baseFare:r2(Math.max(0,sl.baseFare-o.base)),pax:Math.max(0,sl.pax-o.pax),tickets:Math.max(0,sl.tickets-o.tickets)});
+    drawLines(); preview(); });
+  $('lineBody').addEventListener('input',e=>{ const tr=e.target.closest('tr'); const k=e.target.dataset.k; if(!tr||!k) return; const l=bs.lines[+tr.dataset.i]; l[k]=e.target.type==='number'?(+e.target.value||0):e.target.value;
+    if(k==='product'){ l.supplier=''; if(!l.product.startsWith('air')) l.tickets=0; else if(!l.tickets) l.tickets=l.pax||1; drawLines(); }
+    if(k==='supplier'){ if(!(supplier(l.supplier)||{}).isPAL) l.baseFare=0; drawLines(); }
+    preview(); });
+  $('lineBody').addEventListener('click',e=>{ const b=e.target.closest('[data-del]'); if(!b) return; bs.lines.splice(+b.dataset.del,1); drawLines(); preview(); });
+  $('bAddLine').onclick=()=>{ bs.lines.push({id:uid(),soLineId:null,product:'air_intl',supplier:'',desc:'',sp:0,cost:0,baseFare:0,pax:1,tickets:1}); drawLines(); };
+  $('siBox').addEventListener('input',e=>{ const tr=e.target.closest('tr'); const k=e.target.dataset.k; if(!tr||!k) return; si.fees[+tr.dataset.i][k]=e.target.type==='number'?(+e.target.value||0):e.target.value; preview(); });
+  $('siBox').addEventListener('click',e=>{ const b=e.target.closest('[data-del]'); if(!b) return; si.fees.splice(+b.dataset.del,1); drawSI(); preview(); });
+  $('bSave').onclick=()=>{
+    if(!bs.soId){ toast('Pick a sales order before saving'); $('fSO').focus(); return; }
+    if(!bs.lines.length){ toast('Add at least one line'); return; }
+    const miss=bs.lines.findIndex(l=>!l.supplier); if(miss>=0){ toast(`Line ${miss+1} needs a supplier`); return; }
+    const ob=overbillWarnings(bs); if(ob.length && !confirm(ob.join('\n')+'\n\nSave anyway?')) return;
+    if(!orig){ bs.no=nextNo('bs'); DB.billingStatements.push(bs); } else Object.assign(orig,bs);
+    const target=orig||bs;
+    DB.serviceInvoices=DB.serviceInvoices.filter(x=>x.bsId!==target.id);
+    if(hasSI && si.fees.some(f=>+f.amount)){ if(!si.no) si.no=nextNo('si'); si.bsId=target.id; si.date=si.date||target.date; si.fees=si.fees.filter(f=>+f.amount); DB.serviceInvoices.push(si); }
+    save(); toast((orig?'Saved ':'Created ')+target.no+(hasSI&&si.no?' with '+si.no:'')); location.hash='#/statements/'+target.id;
+  };
+}
+
+/* ======================= SALES ORDERS ======================= */
+function soStats(so){
+  const list=bsOfSO(so.id).map(bs=>({bs,r:compute(bs)}));
+  const booked=so.lines.reduce((a,l)=>a+(+l.sp||0),0);
+  const billed=list.reduce((a,x)=>a+x.bs.lines.filter(l=>l.soLineId).reduce((s,l)=>s+(+l.sp||0),0),0);
+  return {list,booked,billed,ae:list.reduce((a,x)=>a+x.r.T.ae,0),ns:list.reduce((a,x)=>a+x.r.T.accrued,0)};
+}
+function soList(){
+  page(`<div class="head"><div><h1>Sales orders</h1><p class="sub">A sales order is the booking. It is billed through one or more billing statements; income is distributed on the statements, not here.</p></div><div class="btns"><a class="btn primary" href="#/orders/new">New sales order</a></div></div>
+  ${hierarchy()}
+  <div class="card"><div class="tw"><table class="t nw"><thead><tr><th>Sales order</th><th>Date</th><th>Client</th><th>Account</th><th>Mode</th><th>Package type</th><th>Route</th><th class="r">Pax</th><th class="r">Booked selling</th><th class="r">Billed to date</th><th style="min-width:120px">Billed</th><th>Statements</th><th class="r">AE income</th><th class="r">North Star income</th></tr></thead><tbody>
+  ${DB.salesOrders.slice().sort((a,b)=>b.no.localeCompare(a.no)).map(so=>{ const s=soStats(so); const cl=client(so.clientCode)||{}; const pct=s.booked?Math.min(100,s.billed/s.booked*100):0;
+    return `<tr class="click" data-id="${so.id}"><td style="white-space:nowrap"><b>${esc(so.no)}</b></td><td style="white-space:nowrap">${esc(so.date)}</td><td>${esc(cl.name)}<div class="muted mono">${esc(cl.code)}</div></td><td>${typeTag(cl.type)}</td><td>${modeTag(so.mode)}</td><td>${esc(so.packageType)}</td><td>${esc(so.route)}</td><td class="r">${so.pax}</td><td class="r">${m(s.booked)}</td><td class="r">${m(s.billed)}</td>
+    <td><div class="bar" style="height:8px"><span style="width:${pct}%;background:var(--accent)"></span></div><div class="muted" style="font-size:12px">${pct.toFixed(0)}%</div></td><td class="mono" style="font-size:12px">${s.list.map(x=>esc(x.bs.no)).join('<br>')||'<span class="muted">None yet</span>'}</td><td class="r">${m(s.ae)}</td><td class="r"><b>${m(s.ns)}</b></td></tr>`; }).join('')}
+  </tbody></table></div></div>
+  <p class="muted">AE and North Star income are the sum of each sales order's billing statements.</p>`);
+  document.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>location.hash='#/orders/'+tr.dataset.id);
+}
+function soView(id){
+  const so=soById(id); if(!so){ page('<div class="empty">That sales order no longer exists. <a href="#/orders">Back to sales orders</a></div>'); return; }
+  const cl=client(so.clientCode)||{}; const s=soStats(so);
+  page(`<div class="crumbs"><a href="#/orders">Sales orders</a> / <a href="#/clients-summary/${encodeURIComponent(cl.code)}">${esc(cl.name)}</a> / ${esc(so.no)}</div>
+  <div class="head"><div><h1>${esc(so.no)}</h1><p class="sub">${esc(cl.name)} · ${typeTag(cl.type)} · ${MODES[so.mode]} · ${esc(so.route)}</p></div>
+  <div class="btns"><a class="btn" href="#/orders/${so.id}/edit">Edit sales order</a>${s.list.length?'':'<button class="btn danger" id="soDel">Delete</button>'}<a class="btn primary" href="#/statements/new/${so.id}">New billing statement</a></div></div>
+  <div class="card"><div class="card-b kv">
+    <div><small>Client</small><b>${esc(cl.code)}</b></div><div><small>Transaction mode</small><b>${MODES[so.mode]}</b></div><div><small>Package type</small><b>${esc(so.packageType)}</b></div><div><small>Route</small><b>${esc(so.route)}</b></div>
+    <div><small>Pax booked</small><b>${so.pax}</b></div><div><small>Date</small><b>${esc(so.date)}</b></div><div><small>Booked selling</small><b>${P(s.booked)}</b></div><div><small>Billed to date</small><b>${P(s.billed)}</b></div>
+  </div>${so.notes?`<div class="card-b muted" style="border-top:1px solid var(--rule-2)">${esc(so.notes)}</div>`:''}</div>
+  <div class="card"><div class="card-h"><h2>Booked lines and what has been billed</h2><span class="muted">Each statement bills only its own portion</span></div><div class="tw"><table class="t"><thead><tr><th>Booked line</th><th class="r">Selling</th><th class="r">Cost</th><th class="r">Pax</th><th class="r">Tickets</th>${s.list.map(x=>`<th class="r">${esc(x.bs.no)}</th>`).join('')}<th class="r">Billed total</th><th class="r">Remaining</th></tr></thead><tbody>
+  ${so.lines.map(sl=>{ const b=billedOnSOLine(sl.id); const rem=sl.sp-b.sp; return `<tr><td><b>${esc(sl.desc||PRODUCTS[sl.product])}</b><div class="muted">${PRODUCTS[sl.product]} · ${esc((supplier(sl.supplier)||{}).short||'')}</div></td><td class="r">${m(sl.sp)}</td><td class="r">${m(sl.cost)}</td><td class="r">${sl.pax}</td><td class="r">${sl.tickets||''}</td>
+    ${s.list.map(x=>{ const ls=x.bs.lines.filter(l=>l.soLineId===sl.id); const v=ls.reduce((a,l)=>a+(+l.sp||0),0); return `<td class="r">${v?m(v)+`<div class="muted" style="font-size:12px">${ls.reduce((a,l)=>a+(+l.pax||0),0)} pax · cost ${m(ls.reduce((a,l)=>a+(+l.cost||0),0))}</div>`:'<span class="muted">–</span>'}</td>`; }).join('')}
+    <td class="r">${m(b.sp)}</td><td class="r ${rem<-0.004?'neg':''}"><b>${m(rem)}</b></td></tr>`; }).join('')}
+  </tbody></table></div></div>
+  <div class="card"><div class="card-h"><h2>Billing statements on this sales order</h2><span class="muted">Totals are the sum of each statement's own result</span></div><div class="tw"><table class="t"><thead><tr><th>Billing statement</th><th>Date</th><th>Service invoice</th><th class="r">Pax</th><th class="r">Billing amount</th><th class="r">Gross margin</th><th class="r">AE income</th><th class="r">Staff error</th><th class="r">North Star income</th><th>Status</th></tr></thead><tbody>
+  ${s.list.map(({bs,r})=>`<tr class="click" data-bs="${bs.id}"><td><b>${esc(bs.no)}</b></td><td>${esc(bs.date)}</td><td class="mono">${esc((siOf(bs)||{}).no||'—')}</td><td class="r">${paxOf(bs.lines)}</td><td class="r">${m(r.T.bs)}</td><td class="r">${m(r.T.gm)}</td><td class="r">${m(r.T.ae)}</td><td class="r">${m(r.T.reserve)}</td><td class="r"><b>${m(r.T.accrued)}</b></td><td>${statusTag(bs.status)}</td></tr>`).join('')||'<tr><td colspan="10" class="empty">Nothing billed yet. Create the first billing statement for this sales order.</td></tr>'}
+  </tbody>${s.list.length?`<tfoot><tr><td colspan="4">Sum of ${s.list.length} statement${s.list.length>1?'s':''}</td><td class="r">${m(s.list.reduce((a,x)=>a+x.r.T.bs,0))}</td><td class="r">${m(s.list.reduce((a,x)=>a+x.r.T.gm,0))}</td><td class="r">${m(s.ae)}</td><td class="r">${m(s.list.reduce((a,x)=>a+x.r.T.reserve,0))}</td><td class="r">${m(s.ns)}</td><td></td></tr></tfoot>`:''}</table></div></div>`);
+  document.querySelectorAll('tr[data-bs]').forEach(tr=>tr.onclick=()=>location.hash='#/statements/'+tr.dataset.bs);
+  if($('soDel')) $('soDel').onclick=()=>{ if(!confirm('Delete '+so.no+'?')) return; DB.salesOrders=DB.salesOrders.filter(x=>x!==so); save(); toast(so.no+' deleted'); location.hash='#/orders'; };
+}
+function soForm(id){
+  const orig=id?soById(id):null;
+  const so=orig?JSON.parse(JSON.stringify(orig)):{id:uid(),no:'',clientCode:'',date:today(),mode:'package',packageType:'Corporate travel',route:'',pax:1,notes:'',lines:[{id:uid(),product:'air_intl',supplier:'',desc:'',sp:0,cost:0,baseFare:0,pax:1,tickets:1}]};
+  const billed=lid=>DB.billingStatements.some(b=>b.lines.some(l=>l.soLineId===lid));
+  const cliOpts=`<option value="">Select a client…</option>`+Object.entries(TYPE_LABEL).map(([t,l])=>`<optgroup label="${l}">${DB.clients.filter(c=>c.type===t).map(c=>`<option value="${c.code}" ${so.clientCode===c.code?'selected':''}>${esc(c.code)} · ${esc(c.name)}</option>`).join('')}</optgroup>`).join('');
+  page(`<div class="crumbs"><a href="#/orders">Sales orders</a> / ${orig?esc(orig.no)+' / Edit':'New'}</div>
+  <div class="head"><div><h1>${orig?'Edit '+esc(orig.no):'New sales order'}</h1><p class="sub">Record the full booking. Bill it afterwards in one or more billing statements.</p></div>
+  <div class="btns"><a class="btn" href="${orig?'#/orders/'+orig.id:'#/orders'}">Cancel</a><button class="btn primary" id="soSave">Save sales order</button></div></div>
+  <div class="card"><div class="card-h"><h2>Booking</h2></div><div class="card-b grid4">
+    <label class="f" style="grid-column:span 2">Client<select class="i" id="sClient" ${orig&&bsOfSO(orig.id).length?'disabled':''}>${cliOpts}</select></label>
+    <label class="f">Date<input class="i" type="date" id="sDate" value="${esc(so.date)}"></label>
+    <label class="f">Pax booked<input class="i num" type="number" min="1" id="sPax" value="${so.pax}"></label>
+    <label class="f">Transaction mode<select class="i" id="sMode">${Object.entries(MODES).map(([k,v])=>`<option value="${k}" ${so.mode===k?'selected':''}>${v}</option>`).join('')}</select></label>
+    <label class="f">Package type<select class="i" id="sPkg">${PKG_TYPES.map(p=>`<option ${so.packageType===p?'selected':''}>${p}</option>`).join('')}</select></label>
+    <label class="f" style="grid-column:span 2">Route<input class="i" id="sRoute" value="${esc(so.route)}" placeholder="e.g. MNL–SIN–MNL"></label>
+    <label class="f" style="grid-column:1 / -1">Notes<input class="i" id="sNotes" value="${esc(so.notes)}" placeholder="Optional"></label>
+  </div></div>
+  <div class="card"><div class="card-h"><h2>Booked lines</h2><button class="btn sm" id="sAdd" type="button">Add line</button></div><div class="tw"><table class="t edit"><thead><tr><th style="min-width:170px">Product</th><th style="min-width:190px">Supplier</th><th style="min-width:200px">Description</th><th class="r" style="min-width:110px">Selling</th><th class="r" style="min-width:110px">Supplier cost</th><th class="r" style="min-width:110px">PAL base fare</th><th class="r" style="width:70px">Pax</th><th class="r" style="width:76px">Tickets</th><th></th></tr></thead><tbody id="sLines"></tbody></table></div></div>`);
+  const supOpts=(p,v)=>{ const kind=p.startsWith('air')?'air':p.startsWith('hotel')?'hotel':p; return `<option value="">Select…</option>`+DB.suppliers.filter(s=>s.product===kind).map(s=>`<option value="${s.code}" ${v===s.code?'selected':''}>${esc(s.name)}</option>`).join(''); };
+  const draw=()=>{ $('sLines').innerHTML=so.lines.map((l,i)=>`<tr data-i="${i}"><td><select class="i" data-k="product">${Object.entries(PRODUCTS).map(([k,v])=>`<option value="${k}" ${l.product===k?'selected':''}>${v}</option>`).join('')}</select></td><td><select class="i" data-k="supplier">${supOpts(l.product,l.supplier)}</select></td><td><input class="i" data-k="desc" value="${esc(l.desc)}"></td><td><input class="i num" type="number" step="0.01" data-k="sp" value="${l.sp||''}"></td><td><input class="i num" type="number" step="0.01" data-k="cost" value="${l.cost||''}"></td><td><input class="i num" type="number" step="0.01" data-k="baseFare" value="${l.baseFare||''}" ${(supplier(l.supplier)||{}).isPAL?'':'disabled placeholder="PAL only"'}></td><td><input class="i num" type="number" min="0" data-k="pax" value="${l.pax}"></td><td><input class="i num" type="number" min="0" data-k="tickets" value="${l.tickets}" ${l.product.startsWith('air')?'':'disabled'}></td><td>${billed(l.id)?'<span class="muted" title="Already billed">Billed</span>':`<button class="btn sm danger" type="button" data-del="${i}" aria-label="Remove line">✕</button>`}</td></tr>`).join(''); };
+  draw();
+  $('sLines').addEventListener('input',e=>{ const tr=e.target.closest('tr'); const k=e.target.dataset.k; if(!tr||!k) return; const l=so.lines[+tr.dataset.i]; l[k]=e.target.type==='number'?(+e.target.value||0):e.target.value; if(k==='product'){ l.supplier=''; if(!l.product.startsWith('air')) l.tickets=0; draw(); } if(k==='supplier'){ if(!(supplier(l.supplier)||{}).isPAL) l.baseFare=0; draw(); } });
+  $('sLines').addEventListener('click',e=>{ const b=e.target.closest('[data-del]'); if(!b) return; so.lines.splice(+b.dataset.del,1); draw(); });
+  $('sAdd').onclick=()=>{ so.lines.push({id:uid(),product:'air_intl',supplier:'',desc:'',sp:0,cost:0,baseFare:0,pax:1,tickets:1}); draw(); };
+  $('soSave').onclick=()=>{
+    so.clientCode=$('sClient').value||so.clientCode; so.date=$('sDate').value; so.pax=+$('sPax').value||0; so.mode=$('sMode').value; so.packageType=$('sPkg').value; so.route=$('sRoute').value.trim(); so.notes=$('sNotes').value;
+    if(!so.clientCode){ toast('Pick a client'); return; }
+    if(!so.lines.length||so.lines.some(l=>!l.supplier)){ toast('Every booked line needs a supplier'); return; }
+    if(!orig){ so.no=nextNo('so'); DB.salesOrders.push(so); } else Object.assign(orig,so);
+    save(); toast('Saved '+so.no); location.hash='#/orders/'+(orig||so).id;
+  };
+}
+
+/* ======================= CLIENT SUMMARY (aggregation only) ======================= */
+function clientRows(code){ return DB.billingStatements.filter(b=>soOf(b).clientCode===code).map(bs=>({bs,so:soOf(bs),r:compute(bs)})); }
+function clientList(){
+  const codes=[...new Set(DB.salesOrders.map(s=>s.clientCode))];
+  const rows=codes.map(c=>{ const cl=client(c)||{code:c,name:c}; const list=clientRows(c); return {cl,list,sos:DB.salesOrders.filter(s=>s.clientCode===c).length,bs:list.reduce((a,x)=>a+x.r.T.bs,0),ae:list.reduce((a,x)=>a+x.r.T.ae,0),ns:list.reduce((a,x)=>a+x.r.T.accrued,0),posted:list.filter(x=>x.bs.status==='posted').length}; }).sort((a,b)=>a.cl.name.localeCompare(b.cl.name));
+  page(`<div class="head"><div><h1>Client summary</h1><p class="sub">A reporting view. Each figure is the sum of the client's individual billing-statement results; nothing is recalculated on combined amounts.</p></div></div>
+  <div class="card"><div class="tw"><table class="t"><thead><tr><th>Client</th><th>Account</th><th>AE / employee</th><th class="r">Sales orders</th><th class="r">Billing statements</th><th class="r">Posted</th><th class="r">Billed</th><th class="r">AE income</th><th class="r">North Star income</th></tr></thead><tbody>
+  ${rows.map(x=>{ const ae=aeOf(x.cl.ae); return `<tr class="click" data-c="${esc(x.cl.code)}"><td><b>${esc(x.cl.name)}</b><div class="muted mono">${esc(x.cl.code)}</div></td><td>${typeTag(x.cl.type)}</td><td>${ae?esc(ae.name)+(ae.person?`<div class="muted">${esc(ae.person)}</div>`:''):'<span class="muted">—</span>'}</td><td class="r">${x.sos}</td><td class="r">${x.list.length}</td><td class="r">${x.posted}</td><td class="r">${m(x.bs)}</td><td class="r">${m(x.ae)}</td><td class="r"><b>${m(x.ns)}</b></td></tr>`; }).join('')}
+  </tbody><tfoot><tr><td colspan="6">All clients (sum of statements)</td><td class="r">${m(rows.reduce((a,x)=>a+x.bs,0))}</td><td class="r">${m(rows.reduce((a,x)=>a+x.ae,0))}</td><td class="r">${m(rows.reduce((a,x)=>a+x.ns,0))}</td></tr></tfoot></table></div></div>`);
+  document.querySelectorAll('tr[data-c]').forEach(tr=>tr.onclick=()=>location.hash='#/clients-summary/'+encodeURIComponent(tr.dataset.c));
+}
+function clientSummary(code){
+  const cl=client(code); if(!cl){ page('<div class="empty">Client not found. <a href="#/clients-summary">Back to client summary</a></div>'); return; }
+  const sos=DB.salesOrders.filter(s=>s.clientCode===code).sort((a,b)=>a.no.localeCompare(b.no));
+  const all=clientRows(code); const sum=(arr,k)=>arr.reduce((a,x)=>a+x.r.T[k],0); const ae=aeOf(cl.ae);
+  page(`<div class="crumbs"><a href="#/clients-summary">Client summary</a> / ${esc(cl.name)}</div>
+  <div class="head"><div><h1>${esc(cl.name)}</h1><p class="sub">${esc(cl.code)} · ${typeTag(cl.type)} ${ae?'· '+esc(ae.name)+(ae.person?' ('+esc(ae.person)+')':''):''}</p></div><div class="btns"><a class="btn" href="#/orders/new">New sales order</a></div></div>
+  <div class="kpis">
+    <div class="kpi"><b>${sos.length} / ${all.length}</b><small>Sales orders / billing statements</small></div>
+    <div class="kpi"><b>${P(sum(all,'bs'))}</b><small>Billed on statements</small></div>
+    <div class="kpi"><b>${P(sum(all,'ae'))}</b><small><i style="background:var(--c-ae)"></i>AE income</small></div>
+    <div class="kpi"><b>${P(sum(all,'reserve'))}</b><small><i style="background:var(--c-res)"></i>Staff error</small></div>
+    <div class="kpi"><b>${P(sum(all,'accrued'))}</b><small><i style="background:var(--c-ns)"></i>North Star income</small></div>
+  </div>
+  <div class="card"><div class="card-h"><h2>Billing statements by sales order</h2><span class="muted">Total = sum of the rows above it</span></div><div class="tw"><table class="t"><thead><tr><th>Sales order / billing statement</th><th>Date</th><th>Service invoice</th><th>Route</th><th class="r">Billing amount</th><th class="r">AE income</th><th class="r">Staff error</th><th class="r">North Star income</th><th>Status</th></tr></thead><tbody>
+  ${sos.map(so=>{ const list=all.filter(x=>x.so.id===so.id); return `<tr class="grp"><td colspan="4"><a href="#/orders/${so.id}">${esc(so.no)}</a> · ${MODES[so.mode]} · ${esc(so.route)}</td><td class="r">${m(sum(list,'bs'))}</td><td class="r">${m(sum(list,'ae'))}</td><td class="r">${m(sum(list,'reserve'))}</td><td class="r">${m(sum(list,'accrued'))}</td><td class="muted">Subtotal</td></tr>`+
+    (list.map(({bs,r})=>`<tr class="click" data-bs="${bs.id}"><td style="padding-left:26px"><b>${esc(bs.no)}</b></td><td>${esc(bs.date)}</td><td class="mono">${esc((siOf(bs)||{}).no||'—')}</td><td>${routeOf(bs.lines)}</td><td class="r">${m(r.T.bs)}</td><td class="r">${m(r.T.ae)}</td><td class="r">${m(r.T.reserve)}</td><td class="r">${m(r.T.accrued)}</td><td>${statusTag(bs.status)}</td></tr>`).join('')||`<tr><td colspan="9" class="muted" style="padding-left:26px">Not billed yet</td></tr>`); }).join('')}
+  </tbody><tfoot><tr><td colspan="4">Client total (sum of ${all.length} statement${all.length===1?'':'s'})</td><td class="r">${m(sum(all,'bs'))}</td><td class="r">${m(sum(all,'ae'))}</td><td class="r">${m(sum(all,'reserve'))}</td><td class="r">${m(sum(all,'accrued'))}</td><td></td></tr></tfoot></table></div></div>`);
+  document.querySelectorAll('tr[data-bs]').forEach(tr=>tr.onclick=()=>location.hash='#/statements/'+tr.dataset.bs);
+}
+
+/* ======================= GENERAL JOURNAL ======================= */
+function journalPage(){
+  const posted=DB.billingStatements.filter(b=>b.status==='posted');
+  const rows=[]; for(const b of posted){ const r=compute(b); for(const j of r.je) for(const x of j.lines) rows.push({bs:b,doc:j.doc,date:b.date,entry:j.title,...x}); }
+  const tb=new Map(); for(const x of rows){ const e=tb.get(x.gl)||{gl:x.gl,dr:0,cr:0}; e.dr+=x.dr||0; e.cr+=x.cr||0; tb.set(x.gl,e); }
+  const tbr=[...tb.values()].sort((a,b)=>a.gl.localeCompare(b.gl));
+  const sdr=tbr.reduce((a,x)=>a+x.dr,0), scr=tbr.reduce((a,x)=>a+x.cr,0);
+  page(`<div class="head"><div><h1>General journal</h1><p class="sub">Entries from ${posted.length} posted billing statement${posted.length===1?'':'s'} and their companion service invoices. Each entry belongs to one statement; drafts are not included.</p></div></div>
+  <div class="card"><div class="card-h"><h2>Trial balance</h2>${Math.abs(sdr-scr)<0.02?'<span class="tag posted">Balanced</span>':'<span class="tag bad">Out of balance</span>'}</div><div class="tw"><table class="t"><thead><tr><th>GL</th><th>Account</th><th class="r">Debit</th><th class="r">Credit</th><th class="r">Balance</th></tr></thead><tbody>
+  ${tbr.map(x=>`<tr><td class="mono">${x.gl}</td><td>${esc(glName(x.gl))}</td><td class="r">${m(x.dr)}</td><td class="r">${m(x.cr)}</td><td class="r">${m(x.dr-x.cr)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">Post a billing statement to see balances.</td></tr>'}
+  </tbody><tfoot><tr><td colspan="2">Total</td><td class="r">${m(sdr)}</td><td class="r">${m(scr)}</td><td></td></tr></tfoot></table></div></div>
+  <div class="card"><div class="card-h"><h2>Journal lines</h2><div class="btns"><select class="i" id="jbs" style="width:auto"><option value="">All statements</option>${posted.map(b=>`<option value="${b.id}">${esc(b.no)}</option>`).join('')}</select><select class="i" id="jgl" style="width:auto"><option value="">All accounts</option>${tbr.map(x=>`<option value="${x.gl}">${x.gl} ${esc(glName(x.gl))}</option>`).join('')}</select></div></div><div class="tw"><table class="t"><thead><tr><th>Date</th><th>Statement</th><th>Document</th><th>Entry</th><th>GL</th><th>Subsidiary ledger</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead><tbody id="jbody"></tbody></table></div></div>`);
+  const draw=()=>{ const g=$('jgl').value, b=$('jbs').value; $('jbody').innerHTML=rows.filter(x=>(!g||x.gl===g)&&(!b||x.bs.id===b)).map(x=>`<tr><td>${esc(x.date)}</td><td><a href="#/statements/${x.bs.id}">${esc(x.bs.no)}</a></td><td class="mono">${esc(x.doc)}</td><td class="muted">${esc(x.entry)}</td><td class="mono">${x.gl}</td><td>${esc(x.sl)}</td><td class="r">${x.dr?m(x.dr):''}</td><td class="r">${x.cr?m(x.cr):''}</td></tr>`).join(''); };
+  $('jgl').onchange=draw; $('jbs').onchange=draw; draw();
+}
+
+/* ======================= MASTER DATA ======================= */
+/* ======================= MASTER DATA ======================= */
+const glOpts=()=>Object.fromEntries(DB.gl.map(g=>[g.code,g.code+' '+g.name]));
+const SCHEMAS={
+  clients:{title:'Clients',sub:'Each client has an account type, which picks the distribution rule, and the AE or employee who owns it.',key:'code',fields:[
+    {k:'code',l:'Client code',hint:'Prefix sets the AR class: CML/CMG/CMM house, CAI internal AE, CAE external AE, CAY employee'},{k:'name',l:'Name'},
+    {k:'type',l:'Account type',type:'select',opts:()=>TYPE_LABEL},{k:'ae',l:'AE / employee',type:'select',opts:()=>({'':'None',...Object.fromEntries(DB.aes.map(a=>[a.code,a.code+' '+a.name+(a.person?' – '+a.person:'')]))})},
+    {k:'twa',l:'Withholding agent (TWA)',type:'check'}],
+    cols:[['code','Code'],['name','Name'],['type','Account',v=>typeTag(v)],['ae','AE / employee',v=>{ const a=aeOf(v); return a?esc(a.name)+(a.person?` <span class="muted">${esc(a.person)}</span>`:''):'<span class="muted">—</span>'; }],['twa','TWA',v=>v?'Yes':'No'],['code','Rebaters',v=>DB.rebaters.filter(r=>r.clientCode===v).length||'']]},
+  aes:{title:'Account executives',sub:'Internal AEs (SAI), external AEs (SAE) and employees (SOE) who earn commission. Leave the rate blank to use the distribution rule.',key:'code',fields:[
+    {k:'code',l:'Supplier code'},{k:'name',l:'Ledger name'},{k:'person',l:'Person'},{k:'type',l:'Type',type:'select',opts:()=>({int:'Internal AE',ext:'External AE',emp:'Employee'})},
+    {k:'rateOverride',l:'Rate override %',type:'number',hint:'Blank = use the rule'},{k:'payGL',l:'Commission payable GL',type:'select',opts:glOpts}],
+    cols:[['code','Code'],['name','Ledger name'],['person','Person'],['type','Type',v=>typeTag(v)],['rateOverride','Rate',(v,x)=>v!==''&&v!=null?v+'%':`<span class="muted">${(by(DB.rules,'type',x.type)||{}).rate}% (rule)</span>`],['payGL','Payable GL',v=>`<span class="mono">${v}</span>`]]},
+  rebaters:{title:'Rebaters',sub:'Third parties paid a fixed amount per ticket on a client\u2019s tickets (AP-Rebates 211108).',key:'code',fields:[
+    {k:'code',l:'Supplier code'},{k:'name',l:'Name'},{k:'clientCode',l:'Client',type:'select',opts:()=>Object.fromEntries(DB.clients.map(c=>[c.code,c.code+' '+c.name])),full:true},
+    {k:'amount',l:'Amount per ticket',type:'number'},{k:'currency',l:'Currency',type:'select',opts:()=>({USD:'USD (× ROE)',PHP:'PHP'})},
+    {k:'unit',l:'Applies to',type:'select',opts:()=>({intl:'International tickets',dom:'Domestic tickets'})},{k:'minUsd',l:'Only if ticket above $',type:'number'},{k:'maxUsd',l:'Only if ticket up to $',type:'number'},{k:'note',l:'Note from coding sheet',full:true}],
+    cols:[['code','Code'],['name','Name'],['clientCode','Client',v=>esc((client(v)||{}).name||v)],['amount','Amount',(v,x)=>(x.currency==='USD'?'$':'₱')+v],['unit','Per',v=>v==='intl'?'intl ticket':'dom ticket'],['note','Note',v=>`<span class="muted">${esc(v)}</span>`]]},
+  suppliers:{title:'Suppliers',sub:'Airlines, hotels, insurers and documentation providers. VAT status decides how the agency\u2019s commission is recognised.',key:'code',fields:[
+    {k:'code',l:'Supplier code',hint:'SAA air, SHH hotel, SDI insurance, SDA documentation'},{k:'name',l:'Name'},{k:'short',l:'Short name'},
+    {k:'product',l:'Product',type:'select',opts:()=>({air:'Air',hotel:'Hotel / land',insurance:'Travel insurance',docs:'Documentation'})},{k:'vat',l:'Commission VAT',type:'select',opts:()=>OPT.vat},{k:'apGL',l:'AP GL',type:'select',opts:glOpts},
+    {k:'payeeIntl',l:'Payee SL – international'},{k:'payeeDom',l:'Payee SL – domestic'},{k:'isPAL',l:'PAL ticket (2% withholding applies)',type:'check'}],
+    cols:[['code','Code'],['name','Name'],['product','Product'],['vat','Commission',v=>OPT.vat[v]],['apGL','AP GL',v=>`<span class="mono">${v}</span>`],['payeeIntl','Payee (intl / dom)',(v,x)=>esc(v)+' / '+esc(x.payeeDom)]]},
+  gl:{title:'Chart of accounts',sub:'Accounts used by the income distribution entries.',key:'code',fields:[{k:'code',l:'GL code'},{k:'name',l:'Account name'},{k:'type',l:'Type',type:'select',opts:()=>({Asset:'Asset',Liability:'Liability',Income:'Income',Expense:'Expense'})}],
+    cols:[['code','GL',v=>`<span class="mono">${v}</span>`],['name','Account'],['type','Type']]},
+  rules:{title:'Distribution rules',sub:'One rule per account type. These are the settings the workbook sheets disagree on; the defaults follow the Corporate Travel workbook.',key:'type',noAdd:true,fields:[
+    {k:'label',l:'Account type'},{k:'rate',l:'Commission rate %',type:'number'},{k:'adm',l:'ADM fee',type:'select',opts:()=>OPT.adm},{k:'dte',l:'DTE',type:'select',opts:()=>OPT.dte},
+    {k:'rebate',l:'Rebates',type:'select',opts:()=>OPT.rebate},{k:'domestic',l:'Domestic lines',type:'select',opts:()=>OPT.domestic},{k:'sfShare',l:'AE shares in international service fees',type:'check',full:true}],
+    cols:[['label','Account type',(v,x)=>typeTag(x.type)],['rate','Rate',v=>v+'%'],['adm','ADM fee',v=>OPT.adm[v]],['dte','DTE',v=>OPT.dte[v]],['rebate','Rebates',v=>OPT.rebate[v]],['domestic','Domestic',v=>OPT.domestic[v]],['sfShare','Fee share',v=>v?'Yes':'No']],
+    note:'The coding sheet lists internal AEs at 60% and the ADM fee at $5; the calculation sheets use 50% and $10. Change them here once accounting confirms. Posted billing statements keep the values they were posted with.'},
+};
+let mq='';
+function masterPage(name){
+  const S=SCHEMAS[name]; if(!S){ txList(); return; }
+  const data=DB[name];
+  page(`<div class="crumbs">Master data</div><div class="head"><div><h1>${S.title}</h1><p class="sub">${S.sub}</p></div><div class="btns">${S.noAdd?'':`<button class="btn primary" id="mAdd">Add</button>`}</div></div>
+  ${S.note?`<div class="alert info">${esc(S.note)}</div>`:''}
+  ${data.length>12?`<div class="filters"><input class="i" id="mq" type="search" placeholder="Search ${S.title.toLowerCase()}" value="${esc(mq)}"></div>`:''}
+  <div class="card"><div class="tw"><table class="t"><thead><tr>${S.cols.map(c=>`<th>${c[1]}</th>`).join('')}<th></th></tr></thead><tbody id="mbody"></tbody></table></div></div>
+  <p class="muted" id="mcount"></p>`);
+  const draw=()=>{
+    const q=mq.toLowerCase(); const list=data.filter(x=>!q||JSON.stringify(x).toLowerCase().includes(q));
+    $('mbody').innerHTML=list.map(x=>`<tr class="click" data-k="${esc(x[S.key])}">${S.cols.map(c=>`<td>${c[2]?c[2](x[c[0]],x):esc(x[c[0]])}</td>`).join('')}<td class="r"><button class="btn sm" type="button">Edit</button></td></tr>`).join('')||`<tr><td colspan="${S.cols.length+1}" class="empty">Nothing matches “${esc(mq)}”.</td></tr>`;
+    $('mcount').textContent=`${list.length} of ${data.length}`;
+    $('mbody').querySelectorAll('tr[data-k]').forEach(tr=>tr.onclick=()=>editRecord(name,tr.dataset.k));
+  };
+  draw();
+  if($('mq')) $('mq').oninput=e=>{ mq=e.target.value; draw(); };
+  if($('mAdd')) $('mAdd').onclick=()=>editRecord(name,null);
+}
+function editRecord(name,key){
+  const S=SCHEMAS[name]; const data=DB[name]; const rec=key!=null?data.find(x=>String(x[S.key])===String(key)):null;
+  const v=rec?{...rec}:{};
+  const used = name==='clients'&&rec ? DB.salesOrders.some(s=>s.clientCode===rec.code) : name==='suppliers'&&rec ? (DB.salesOrders.some(s=>s.lines.some(l=>l.supplier===rec.code))||DB.billingStatements.some(b=>b.lines.some(l=>l.supplier===rec.code))) : name==='aes'&&rec ? DB.clients.some(c=>c.ae===rec.code) : false;
+  const d=$('dlg');
+  d.innerHTML=`<form method="dialog" id="rf"><div class="dh"><b>${rec?'Edit':'Add'} ${S.title.toLowerCase().replace(/s$/,'')}</b><button class="btn sm" value="cancel" type="submit" aria-label="Close">✕</button></div><div class="db">
+  ${S.fields.map(f=>{ const val=v[f.k]??''; const cls=f.full||f.type==='check'?'full':''; 
+    if(f.type==='check') return `<label class="chk ${cls}"><input type="checkbox" name="${f.k}" ${val?'checked':''}> ${f.l}</label>`;
+    if(f.type==='select') return `<label class="f ${cls}">${f.l}<select class="i" name="${f.k}">${Object.entries(f.opts()).map(([k,l])=>`<option value="${esc(k)}" ${String(val)===String(k)?'selected':''}>${esc(l)}</option>`).join('')}</select>${f.hint?`<span class="hint">${f.hint}</span>`:''}</label>`;
+    return `<label class="f ${cls}">${f.l}<input class="i" name="${f.k}" ${f.type==='number'?'type="number" step="any"':''} value="${esc(val)}" ${name==='rules'&&f.k==='label'?'readonly':''} ${f.k===S.key&&rec&&used?'readonly':''}>${f.hint?`<span class="hint">${f.hint}</span>`:''}</label>`; }).join('')}
+  </div><div class="df">${rec&&!S.noAdd?`<button class="btn danger" type="button" id="rDel" ${used?'disabled title="In use"':''} style="margin-right:auto">${used?'In use – can\u2019t delete':'Delete'}</button>`:''}<button class="btn" value="cancel" type="submit">Cancel</button><button class="btn primary" type="button" id="rSave">Save</button></div></form>`;
+  d.showModal();
+  $('rSave').onclick=()=>{
+    const fd=new FormData($('rf')); const out={...v};
+    for(const f of S.fields){ if(f.type==='check') out[f.k]=fd.has(f.k); else if(f.type==='number'){ const x=fd.get(f.k); out[f.k]= x===''?'':+x; } else out[f.k]=(fd.get(f.k)??'').toString().trim(); }
+    if(!out[S.key]&&S.key!=='type'){ toast('Fill in the '+S.fields[0].l.toLowerCase()); return; }
+    if(!rec && data.some(x=>x[S.key]===out[S.key])){ toast('That code already exists'); return; }
+    if(rec) Object.assign(rec,out); else data.push(out);
+    save(); d.close(); toast('Saved'); route();
+  };
+  if($('rDel')) $('rDel').onclick=()=>{ if(!confirm('Delete this record?')) return; DB[name]=data.filter(x=>x!==rec); save(); d.close(); toast('Deleted'); route(); };
+}
+
+/* ======================= CLIENT DEMO MODE (read-only presentation layer) ======================= */
+const DEMO_SCENARIOS=[
+  {key:'internal',title:'Internal AE',sub:'Package · International',so:'SO-2026-0001',blurb:'ABC Corporation. One booking for 4 travellers, billed as two separate statements.'},
+  {key:'external',title:'External AE',sub:'Package · International',so:'SO-2026-0005',blurb:'Crew Asia. The AE pays the client\u2019s rebates out of their commission.'},
+  {key:'employee',title:'Employee / CAY',sub:'Package · International',so:'SO-2026-0006',blurb:'Staff travel booked under an employee account at 30%.'},
+  {key:'domestic',title:'Domestic A La Carte',sub:'External AE · Domestic',so:'SO-2026-0007',blurb:'A single domestic ticket. Uses a different method from the packages.'},
+  {key:'mixed',title:'Mixed Products',sub:'+ Service Fee',so:'SO-2026-0008',blurb:'Air, hotel, insurance and visa on one statement, with a companion service invoice.'},
+];
+const DEMO_STEPS=['Booking','Billing Statement','Income Distribution','Final Result'];
+const TIP={
+  so:'The original booking.',
+  bs:'The portion of the booking billed to the client.',
+  si:'A separate VAT invoice for service fees, linked to one billing statement.',
+  gm:'Selling price minus supplier cost.',
+  nm:'Gross margin after pass-through fees and supplier withholding tax.',
+  ndm:'Margin remaining after applicable deductions and VAT.',
+  ae:'Amount assigned to the Account Executive.',
+  ns:'Income retained by North Star.',
+  res:'15% of North Star\u2019s share held back on international air and hotel to cover staff errors.',
+  ipp:'A fixed $3 per international ticket paid to a third party.',
+  dte:'A fixed $4 per international passenger paid to a third party.',
+  adm:'A fixed $10 per passenger admin fee on international bookings.',
+  cwt:'2% of the PAL base fare, withheld when the client is a withholding agent.',
+  vat:'The margin includes 12% VAT, which is set aside before splitting.',
+  sfe:'The AE\u2019s share of the service fee, net of VAT.',
+  reb:'A fixed amount per ticket paid to a third party named by the client.',
+};
+const info=t=>`<span class="info" tabindex="0" role="note" aria-label="${esc(t)}" data-tip="${esc(t)}">i</span>`;
+let demoShowDetail=false;
+function demoData(sc,bsId){
+  const so=DB.salesOrders.find(s=>s.no===sc.so); if(!so) return null;
+  const list=bsOfSO(so.id); const bs=(bsId&&list.find(b=>b.id===bsId))||list[0];
+  return {so,list,bs,cl:client(so.clientCode)||{},r:bs?compute(bs):null};
+}
+function demoHome(){
+  page(`<div class="demo-hero"><div class="demo-eyebrow">NORMA</div><h1 class="demo-h1">Income Distribution Demo</h1>
+    <p class="demo-lede">See how booking income is distributed between the Account Executive and North Star.</p></div>
+    <div class="demo-flow" aria-label="How it works"><div><b>Booking</b><span>Sales Order</span></div><i>→</i><div><b>Billed</b><span>one or more Billing Statements</span></div><i>→</i><div><b>Distributed</b><span>per Billing Statement</span></div><i>→</i><div><b>Result</b><span>AE and North Star</span></div></div>
+    <h2 class="demo-h2">Choose a scenario</h2>
+    <div class="scen-grid">${DEMO_SCENARIOS.map((sc,i)=>{ const d=demoData(sc); if(!d||!d.bs) return ''; const T=d.list.map(b=>compute(b).T);
+      return `<a class="scen" href="#/demo/${sc.key}/1"><span class="scen-n">${i+1}</span><b>${sc.title}</b><span class="scen-sub">${sc.sub}</span><p>${esc(sc.blurb)}</p>
+      <span class="scen-foot"><span>${esc(d.cl.name)}</span><span>${d.list.length} billing statement${d.list.length>1?'s':''}</span></span></a>`; }).join('')}</div>
+    <p class="muted demo-note">Sample data only. Nothing here can be edited or posted. Switch to <b>Full System</b> to see the working application.</p>`);
+}
+function demoView(key,step,bsId){
+  const sc=DEMO_SCENARIOS.find(s=>s.key===key); if(!sc){ demoHome(); return; }
+  const d=demoData(sc,bsId); if(!d||!d.bs){ page('<div class="empty">This scenario\u2019s sample data is missing. Reset the demo data from Full System › Fees & rates.</div>'); return; }
+  step=Math.min(4,Math.max(1,+step||1));
+  const {so,list,bs,cl,r}=d; const C=r.C;
+  const link=(s,b)=>`#/demo/${key}/${s}${(b||bs.id)?'/'+(b||bs.id):''}`;
+  const stepper=`<nav class="stepper" aria-label="Steps">${DEMO_STEPS.map((t,i)=>`<a href="${link(i+1)}" class="${i+1===step?'on':i+1<step?'done':''}" ${i+1===step?'aria-current="step"':''}><span>${i+1}</span>${t}</a>`).join('<i></i>')}</nav>`;
+  const bsSwitch = list.length>1 && step>1 ? `<div class="bs-switch" role="tablist" aria-label="Billing statement">${list.map(b=>`<a role="tab" href="${link(step,b.id)}" aria-selected="${b.id===bs.id}"><b>${esc(b.no)}</b><span>${paxOf(b.lines)} pax · ${P(compute(b).T.bs)}</span></a>`).join('')}<span class="muted bs-switch-note">Each statement is calculated on its own</span></div>` : '';
+  const body = step===1?demoStep1(d,link): step===2?demoStep2(d): step===3?demoStep3(d): demoStep4(d,link);
+  page(`<div class="crumbs"><a href="#/demo">Demo home</a> / ${esc(sc.title)} · ${esc(sc.sub)}</div>
+    <div class="head"><div><h1>${esc(sc.title)} <span class="demo-sub">${esc(sc.sub)}</span></h1><p class="sub">${esc(cl.name)} · ${esc(so.no)}${list.length>1?' · '+list.length+' billing statements':''}</p></div></div>
+    ${stepper}${bsSwitch}<div class="demo-body">${body}</div>
+    <div class="demo-nav">${step>1?`<a class="btn" href="${link(step-1)}">← Back</a>`:`<a class="btn" href="#/demo">← All scenarios</a>`}<span class="muted">Step ${step} of 4</span>${step<4?`<a class="btn primary" href="${link(step+1)}">Next: ${DEMO_STEPS[step]} →</a>`:`<a class="btn primary" href="#/demo">Try another scenario</a>`}</div>`);
+  const tg=$('detToggle'); if(tg) tg.onclick=()=>{ demoShowDetail=!demoShowDetail; $('detBox').hidden=!demoShowDetail; tg.setAttribute('aria-expanded',demoShowDetail); tg.textContent=demoShowDetail?'Hide detailed calculation':'Show detailed calculation'; };
+}
+const kvBox=items=>`<div class="card"><div class="card-b kv demo-kv">${items.map(([k,v,t])=>`<div><small>${k}${t?' '+info(t):''}</small><b>${v}</b></div>`).join('')}</div></div>`;
+const explain=(t,cls='')=>`<div class="explain ${cls}">${t}</div>`;
+function demoStep1({so,list,cl},link){
+  const ae=aeOf(cl.ae);
+  return `${explain('The Sales Order represents the original booking.')}
+  ${kvBox([['Client',esc(cl.name)],['Sales Order',esc(so.no),TIP.so],['AE / Employee',ae?esc(ae.person||ae.name):'None (house account)'],['Account type',typeTag(cl.type)],['Transaction mode',MODES[so.mode]],['Package type',esc(so.packageType)],['Route',esc(so.route)],['Pax',so.pax]])}
+  <div class="card"><div class="card-h"><h2>Booked products</h2></div><div class="tw"><table class="t demo-t"><thead><tr><th>Product</th><th class="r">Selling</th><th class="r">Supplier cost</th><th class="r">Pax</th></tr></thead><tbody>
+  ${so.lines.map(l=>`<tr><td><b>${esc(l.desc||PRODUCTS[l.product])}</b><div class="muted">${PRODUCTS[l.product]}</div></td><td class="r">${P(l.sp)}</td><td class="r">${P(l.cost)}</td><td class="r">${l.pax}</td></tr>`).join('')}
+  </tbody><tfoot><tr><td>Total booked</td><td class="r">${P(so.lines.reduce((a,l)=>a+l.sp,0))}</td><td class="r">${P(so.lines.reduce((a,l)=>a+l.cost,0))}</td><td></td></tr></tfoot></table></div></div>
+  <div class="card"><div class="card-h"><h2>Billed as</h2><span class="muted">${list.length>1?'This booking was billed in '+list.length+' parts':'Billed in a single statement'}</span></div><div class="card-b billed-as">
+  <div class="tree"><div class="tree-root"><b>${esc(so.no)}</b><span>${so.pax} passenger${so.pax>1?'s':''} · ${P(so.lines.reduce((a,l)=>a+l.sp,0))}</span></div>
+  ${list.map(b=>`<a class="tree-leaf" href="${link(2,b.id)}"><b>${esc(b.no)}</b><span>${paxOf(b.lines)} pax · ${P(b.lines.reduce((a,l)=>a+(+l.sp||0),0))}${siOf(b)?' · with '+esc(siOf(b).no):''}</span></a>`).join('')}</div></div></div>`;
+}
+function demoStep2({so,list,bs,cl,r}){
+  const booked=so.lines.reduce((a,l)=>a+l.sp,0);
+  const here=bs.lines.filter(l=>l.soLineId).reduce((a,l)=>a+(+l.sp||0),0);
+  const others=list.filter(b=>b.id!==bs.id).reduce((a,b)=>a+b.lines.filter(l=>l.soLineId).reduce((s,l)=>s+(+l.sp||0),0),0);
+  const remaining=Math.max(0,booked-here-others);
+  const si=siOf(bs);
+  const partial = here<booked-0.004;
+  return `${explain('<b>Income Distribution is calculated per Billing Statement</b>, not for the entire client or Sales Order. Only the products and amounts on this statement are used.','strong')}
+  ${kvBox([['Billing Statement',esc(bs.no),TIP.bs],['Client',esc(cl.name)],['Sales Order',esc(so.no),TIP.so],['Date',esc(bs.date)],['Pax on this invoice',paxOf(bs.lines)],['Billing amount',P(r.T.bs)],['Companion Service Invoice',si?esc(si.no):'None',TIP.si]])}
+  <div class="card"><div class="card-h"><h2>What this statement bills</h2></div><div class="card-b">
+    ${partial?`<div class="portion">
+      <div class="portion-cell"><small>Original booking</small><b>${P(booked)}</b></div>
+      <div class="portion-cell hl"><small>This Billing Statement</small><b>${P(here)}</b></div>
+      ${others>0.004?`<div class="portion-cell"><small>Other statements</small><b>${P(others)}</b></div>`:''}
+      <div class="portion-cell"><small>Remaining to bill</small><b>${P(remaining)}</b></div></div>
+      <div class="portion-bar" role="img" aria-label="This statement is ${(here/booked*100).toFixed(0)}% of the booking"><span class="p-here" style="width:${here/booked*100}%">${esc(bs.no)}</span>${others>0.004?`<span class="p-other" style="width:${others/booked*100}%">Other statements</span>`:''}${remaining>0.004?`<span class="p-rem" style="width:${remaining/booked*100}%">Remaining</span>`:''}</div>
+      <p class="muted" style="margin:10px 0 0">Only ${P(here)} of the ${P(booked)} booking is distributed on ${esc(bs.no)}. The rest is distributed on ${others>0.004?'the other statement(s)':'later statements'}, so nothing is counted twice.</p>`
+    :`<p style="margin:0">${esc(bs.no)} bills the whole booking (${P(booked)}).</p>`}
+  </div></div>
+  <div class="card"><div class="card-h"><h2>Products on ${esc(bs.no)}</h2></div><div class="tw"><table class="t demo-t"><thead><tr><th>Product</th><th class="r">Selling</th><th class="r">Supplier cost</th><th class="r">Pax</th></tr></thead><tbody>
+  ${bs.lines.map(l=>`<tr><td><b>${esc(l.desc||PRODUCTS[l.product])}</b><div class="muted">${PRODUCTS[l.product]}</div></td><td class="r">${P(l.sp)}</td><td class="r">${P(l.cost)}</td><td class="r">${l.pax}</td></tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+/* readable per-line breakdown built from the engine's own line results */
+function lineBreakdown(l,C){
+  const R=C.rule, rows=[];
+  const add=(label,v,kind,tip)=>rows.push({label,v,kind,tip});
+  add(l.ccDed?'Selling price (incl. card surcharge)':'Selling price',l.ccDed?l.billed:l.sp,'');
+  add('Supplier cost',-l.cost,'');
+  add('Gross margin',l.gm,'sub',TIP.gm);
+  const less=[];
+  if(l.ccDed) less.push(['Card surcharge',l.ccDed]);
+  if(l.ipp) less.push(['IPP',l.ipp,TIP.ipp]);
+  const dteM=l.dte-l.dteA; if(dteM) less.push(['DTE',dteM,TIP.dte]);
+  const admM=l.admCharged-l.admAE; if(admM) less.push(['Admin fee',admM,TIP.adm]);
+  const rebM=R.rebate==='margin'?l.rebT:0; if(rebM) less.push(['Rebates',rebM,TIP.reb]);
+  if(l.pwt) less.push(['Supplier CWT',l.pwt,TIP.cwt]);
+  if(less.length){ rows.push({label:'Less:',kind:'hd'}); less.forEach(([a,v,t])=>add(a,-v,'ind',t)); add('Net margin',l.nm,'sub',TIP.nm); }
+  if(!l.comm){ add('Non-commissionable – all margin stays with North Star',null,'note'); add('North Star final',l.accrued,'ns',TIP.ns); return rows; }
+  add('Less VAT',-l.vat,'',TIP.vat);
+  add('Net distributable margin',l.ndm,'sub',TIP.ndm);
+  if(l.placeholder){ add('Domestic is non-commissionable for this AE (₱0.01 sales-report marker)',l.placeholder,'note'); }
+  else if(C.rate>0){
+    const pct=!l.intl&&R.domestic==='full'?100:C.rate;
+    add(`AE share (${pct}%)`,l.share,'',TIP.ae);
+    if(l.sfShare) add('+ Service fee entitlement',l.sfShare,'',TIP.sfe);
+    if(l.rebAE) add('Less rebates (paid by the AE)',-l.rebAE,'',TIP.reb);
+    if(l.admAE) add('Less admin fee (paid by the AE)',-l.admAE,'');
+  }
+  add('AE income',l.aeNet,'ae',TIP.ae);
+  add('North Star share',l.ns,'',TIP.ns+' Net margin less the AE share; includes the VAT portion.');
+  if(l.reserve) add('Less staff error reserve',-l.reserve,'',TIP.res);
+  if(l.dteA) add('Less DTE',-l.dteA,'',TIP.dte);
+  add('North Star final',l.accrued,'ns',TIP.ns);
+  return rows;
+}
+const ledger=rows=>`<div class="ledger">${rows.map(x=> x.kind==='hd'?`<div class="lg-hd">${x.label}</div>` : x.kind==='note'?`<div class="lg-note">${esc(x.label)}${x.v?` <b>${P(x.v)}</b>`:''}</div>` :
+  `<div class="lg-row ${x.kind}"><span>${esc(x.label)}${x.tip?' '+info(x.tip):''}</span><b>${x.v<0?'('+P(-x.v)+')':P(x.v)}</b></div>`).join('')}</div>`;
+function friendlyWarnings(r,extra){
+  const out=[];
+  for(const w of r.warn) out.push(['Please check',w]);
+  for(const w of extra) out.push(w);
+  return out.length?`<div class="warn-cards">${out.map(([t,m])=>`<div class="warn-card"><b>${esc(t)}</b><span>${esc(m)}</span></div>`).join('')}</div>`:'';
+}
+function demoConfigNotes(C){
+  const n=[];
+  if(C.client.type==='ext') n.push(['Accounting confirmation needed','External AE withholding rate is not yet configured. The coding sheet mentions 2% EWT on external AE commission; it is not applied here.']);
+  if(C.client.type==='int'&&C.rate===50) n.push(['Accounting confirmation needed','The calculation sheets use 50% for internal AEs; the coding sheet lists 60%. This demo uses 50%.']);
+  return n;
+}
+function siCard(bs,r){
+  const si=r.C.si; if(!si) return '';
+  const gross=r.fees.reduce((a,f)=>a+f.billed,0), vat=r.fees.reduce((a,f)=>a+f.vat,0), net=r.fees.reduce((a,f)=>a+f.net,0);
+  const target=r.lines.find(l=>l.sfShare>0);
+  return `<div class="card si-card"><div class="card-h"><h2>Companion Service Invoice ${info(TIP.si)}</h2><span class="tag mode">${esc(si.no)} ↔ ${esc(bs.no)}</span></div><div class="card-b si-flow">
+    ${ledger([{label:'Service fee gross',v:gross},{label:'Less VAT',v:-vat,tip:TIP.vat},{label:'Net service fee',v:net,kind:'sub'},{label:'AE service fee entitlement',v:r.T.sfEnt,kind:'ae',tip:TIP.sfe}])}
+    <div class="si-arrow">${r.T.sfEnt>0.004?`<span>Service fee entitlement</span><i>↓</i><span>allocated against <b>${esc(target?(target.desc||PRODUCTS[target.product]):'an eligible line')}</b></span>`:`<span>${r.C.rate>0?'Domestic and documentation service fees are not shared with the AE.':'No AE on this account, so North Star keeps the full service fee.'}</span>`}</div>
+  </div></div>`;
+}
+function demoStep3({so,list,bs,cl,r}){
+  const C=r.C;
+  const domFull = C.client.type==='ext' && C.rule.domestic==='full' && r.lines.every(l=>!l.intl);
+  let special='';
+  if(domFull){
+    const pax=paxOf(bs.lines)||1; const dsf=r.fees.filter(f=>f.type==='sf_air_dom').reduce((a,f)=>a+(+f.amount||0),0); const per=dsf/pax;
+    const vatKept=r.lines.reduce((a,l)=>a+l.vat,0), toAE=r.lines.reduce((a,l)=>a+l.aeNet,0);
+    special=`<div class="method-card"><div class="method-tag">Different method</div><h2>Domestic A La Carte</h2>
+      <div class="method-grid"><div><small>North Star keeps</small><b>${dsf?`${P(per)} × ${pax} pax = ${P(dsf)}`:'—'}</b><span>the domestic service fee${r.C.si?' on '+esc(r.C.si.no):''}, plus the VAT portion of the margin (${P(vatKept)})</span></div>
+      <div class="method-arrow">→</div><div><small>Remaining distributable amount</small><b>${P(toAE)}</b><span>goes to the AE</span></div></div>
+      <p class="method-foot">No percentage split after this point.</p></div>`;
+  }
+  return `${explain(`Calculated for <b>${esc(bs.no)}</b> only.`+(list.length>1?' Switch statements above to see each one\u2019s own result.':''))}
+  ${special}
+  ${friendlyWarnings(r,demoConfigNotes(C))}
+  <div class="bd-grid">${r.lines.map(l=>`<div class="card bd-card"><div class="card-h"><div><h2>${esc(PRODUCTS[l.product])}</h2><span class="muted">${esc(l.desc||'')}${l.pax?' · '+l.pax+' pax':''}</span></div>${l.comm?'':'<span class="tag draft">Non-commissionable</span>'}</div><div class="card-b">${ledger(lineBreakdown(l,C))}</div></div>`).join('')}</div>
+  ${siCard(bs,r)}
+  <div class="detail-wrap"><button class="btn" id="detToggle" type="button" aria-expanded="${demoShowDetail}" aria-controls="detBox">${demoShowDetail?'Hide':'Show'} detailed calculation</button>
+  <div id="detBox" ${demoShowDetail?'':'hidden'}>${distHTML(r)}</div></div>`;
+}
+function demoStep4({so,list,bs,cl,r},link){
+  const C=r.C, T=r.T, ext=C.client.type==='ext';
+  const aeName=C.ae?(C.ae.person||C.ae.name):'No AE (house account)';
+  const total=Math.max(0.01,T.ae+T.accrued);
+  const adj=[];
+  if(T.sfEnt>0.004) adj.push(['Service fee entitlement (included in AE)',T.sfEnt,TIP.sfe]);
+  if(T.reb>0.004) adj.push([`Rebates (${C.rule.rebate==='ae'?'paid out of the AE share':'paid out of the margin'})`,T.reb,TIP.reb]);
+  if(T.reserve>0.004) adj.push(['Staff error reserve (held back from North Star)',T.reserve,TIP.res]);
+  if(T.adm>0.004) adj.push(['Admin fee',T.adm,TIP.adm]);
+  const aeGross=r.lines.reduce((a,l)=>a+l.aeGross+l.placeholder,0), rebAE=r.lines.reduce((a,l)=>a+l.rebAE,0), admAE=r.lines.reduce((a,l)=>a+l.admAE,0);
+  return `<div class="result-hd"><h2>Income Distribution Result</h2><span class="muted">${esc(bs.no)} · ${esc(cl.name)}</span></div>
+  <div class="result-cards">
+    <div class="rc rc-ae"><small>AE / Employee ${info(TIP.ae)}</small><b>${P(T.ae)}</b><span>${esc(aeName)}</span></div>
+    <div class="rc rc-ns"><small>North Star ${info(TIP.ns)}</small><b>${P(T.accrued)}</b><span>after staff error reserve</span></div>
+  </div>
+  <div class="result-bar" role="img" aria-label="AE ${(T.ae/total*100).toFixed(0)} percent, North Star ${(T.accrued/total*100).toFixed(0)} percent"><span style="width:${Math.max(0,T.ae)/total*100}%;background:var(--c-ae)">${T.ae/total>0.1?'AE '+(T.ae/total*100).toFixed(0)+'%':''}</span><span style="width:${Math.max(0,T.accrued)/total*100}%;background:var(--c-ns)">${T.accrued/total>0.1?'North Star '+(T.accrued/total*100).toFixed(0)+'%':''}</span></div>
+  ${ext?`<div class="card"><div class="card-h"><h2>External AE payout</h2></div><div class="card-b">${ledger([{label:'AE commission',v:aeGross,tip:TIP.ae},...(rebAE?[{label:'Less rebate',v:-rebAE,tip:TIP.reb}]:[]),...(admAE?[{label:'Less admin fee',v:-admAE}]:[]),{label:'AE before EWT',v:T.ae,kind:'ae'}])}<div class="lg-row pending"><span>External EWT</span><b>Pending / Not available</b></div></div></div>`:''}
+  ${adj.length?`<div class="card"><div class="card-h"><h2>Adjustments</h2></div><div class="card-b">${adj.map(([a,v,t])=>`<div class="lg-row small"><span>${a} ${info(t)}</span><b>${P(v)}</b></div>`).join('')}</div></div>`:''}
+  ${r.C.si?`<div class="card"><div class="card-b"><div class="lg-row small" style="border:0;padding:0"><span>Service fee revenue kept by North Star on ${esc(r.C.si.no)} (net of VAT, less AE entitlement) ${info('Billed on the companion service invoice; not part of the line distribution above.')}</span><b>${P(r.fees.reduce((a,f)=>a+f.net,0)-T.sfEnt)}</b></div></div></div>`:''}
+  ${friendlyWarnings({warn:[]},demoConfigNotes(C))}
+  ${list.length>1?summaryBlock(so,list,bs,link):''}`;
+}
+function summaryBlock(so,list,bs,link){
+  const rows=list.map(b=>({b,T:compute(b).T}));
+  return `<div class="card"><div class="card-h"><h2>Client / Sales Order summary</h2><span class="tag posted">Summary = sum of individual Billing Statement results</span></div><div class="tw"><table class="t demo-t"><thead><tr><th>Billing statement</th><th class="r">Pax</th><th class="r">Billing amount</th><th class="r">AE / Employee</th><th class="r">North Star</th></tr></thead><tbody>
+  ${rows.map(({b,T})=>`<tr class="${b.id===bs.id?'cur':''}"><td><a href="${link(4,b.id)}"><b>${esc(b.no)}</b></a>${b.id===bs.id?' <span class="muted">(viewing)</span>':''}</td><td class="r">${paxOf(b.lines)}</td><td class="r">${P(T.bs)}</td><td class="r">${P(T.ae)}</td><td class="r">${P(T.accrued)}</td></tr>`).join('')}
+  </tbody><tfoot><tr><td>${esc(so.no)} total</td><td class="r">${rows.reduce((a,x)=>a+paxOf(x.b.lines),0)}</td><td class="r">${P(rows.reduce((a,x)=>a+x.T.bs,0))}</td><td class="r">${P(rows.reduce((a,x)=>a+x.T.ae,0))}</td><td class="r">${P(rows.reduce((a,x)=>a+x.T.accrued,0))}</td></tr></tfoot></table></div></div>`;
+}
+
+/* ---------- mode switch ---------- */
+let MODE='demo'; try{ MODE=localStorage.getItem('norma-mode')||'demo'; }catch(e){}
+function applyMode(){
+  document.body.classList.toggle('demo-mode',MODE==='demo');
+  document.querySelectorAll('.modesw button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===MODE));
+  const links=[...document.querySelectorAll(MODE==='demo'?'#navDemo a':'#navFull a')];
+  $('mobsel').innerHTML=links.map(a=>`<option value="${a.getAttribute('href')}" data-nav="${a.dataset.nav}">${a.textContent.trim()}</option>`).join('');
+}
+function setMode(m){ MODE=m; try{ localStorage.setItem('norma-mode',m); }catch(e){} applyMode(); location.hash = m==='demo'?'#/demo':'#/statements'; route(); }
+document.querySelectorAll('.modesw button').forEach(b=>b.onclick=()=>{ if(b.dataset.mode!==MODE) setMode(b.dataset.mode); });
+$('navDemo').innerHTML=`<div class="navsec">Client demo</div><a href="#/demo" data-nav="demo">Demo home</a><div class="navsec">Scenarios</div>`+DEMO_SCENARIOS.map(s=>`<a href="#/demo/${s.key}/1" data-nav="demo-${s.key}">${s.title}</a>`).join('');
+
+/* ======================= SETTINGS ======================= */
+function settingsPage(){
+  const S=DB.settings;
+  const F=[['roe','Exchange rate (₱ per USD)'],['ipp','IPP per ticket (USD)'],['dte','DTE per international passenger (USD)'],['adm','Admin (ADM) fee per passenger (USD)'],['cc','Card merchant fee %'],['vat','VAT %'],['ewt','Withholding on service fee %'],['palcwt','Supplier CWT – PAL % of base fare'],['reserve','Staff error reserve %']];
+  page(`<div class="head"><div><h1>Fees &amp; rates</h1><p class="sub">Used by every draft billing statement. Posted statements keep the values they were posted with.</p></div><div class="btns"><button class="btn primary" id="sSave">Save changes</button></div></div>
+  <div class="card"><div class="card-b grid3">${F.map(([k,l])=>`<label class="f">${l}<input class="i num" type="number" step="any" id="s_${k}" value="${S[k]}"></label>`).join('')}
+  <label class="f">Deposit bank account<input class="i" id="s_bank" value="${esc(S.bank)}"></label><label class="f">Card acquirer (payable SL)<input class="i" id="s_card" value="${esc(S.card)}"></label></div></div>
+  <div class="card"><div class="card-h"><h2>Demo data</h2></div><div class="card-b"><p class="muted" style="margin-top:0">Everything here is stored in this browser only. Resetting restores the sample clients, AEs, rebaters, suppliers, 8 sales orders, 9 billing statements and their service invoices.</p><button class="btn danger" id="sReset">Reset all data</button></div></div>`);
+  $('sSave').onclick=()=>{ for(const [k] of F) S[k]=+$('s_'+k).value; S.bank=$('s_bank').value; S.card=$('s_card').value; save(); toast('Fees and rates saved'); };
+  $('sReset').onclick=()=>{ if(!confirm('Reset all data to the samples? Your changes will be lost.')) return; initDB(true); toast('Data reset'); location.hash='#/statements'; };
+}
+
+/* theme */
+(function(){ let t=null; try{t=localStorage.getItem('idv-theme')}catch(e){} if(t) document.documentElement.setAttribute('data-theme',t);
+  $('themeBtn').onclick=()=>{ const cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); const nx=cur==='dark'?'light':'dark'; document.documentElement.setAttribute('data-theme',nx); try{localStorage.setItem('idv-theme',nx)}catch(e){} }; })();
+
+function initDB(force){
+  if(!force){ try{ DB=JSON.parse(localStorage.getItem(KEY)); }catch(e){ DB=null; } }
+  if(force||!DB||DB.v!==3){ const d=defaultDB(); DB=d.db; for(const id of d.post) postBS(bsById(id)); save(); }
+}
+initDB();
+applyMode();
+route();
+window.__compute=compute; window.__DB=()=>DB;
+window.__test=()=>DB.billingStatements.map(b=>{ const r=compute(b); const acc={}; r.lines.forEach(l=>acc[l.sup.short]=(acc[l.sup.short]||0)+r2(l.accrued)); return [b.no,soOf(b).no,(siOf(b)||{}).no||null,b.status,acc,r2(r.T.ae),r2(r.T.accrued),r.je.map(j=>j.ok)]; });
+</script>
+</body>
+</html>
